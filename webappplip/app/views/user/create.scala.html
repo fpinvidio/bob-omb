@@ -1,0 +1,23 @@
+@(userform: Form[User], roles: List[Role])
+
+@import helper._
+@import fields._
+@implicitField = @{ FieldConstructor(bootstrapfield.f) }
+
+@main("PLiP Administration Panel") { 	
+	<h2>Add a new user</h2>
+	<div class="well well-lg col-md-6">
+		@form(routes.UserController.createUser(), 'class -> "form-horizontal") {
+			@inputText(userform("name"), '_label -> "Name", 'class -> "form-control")
+			@inputText(userform("last_name"), '_label -> "Lastname", 'class -> "form-control")
+			@inputText(userform("username"), '_label -> "Username", 'class -> "form-control")
+			@inputPassword(userform("password"), '_label -> "Password", 'class -> "form-control")
+			@select(userform("role.id"), roles.map{
+				r => r.id.toString -> r.name 
+			}, '_label -> "Role",
+	               '_showConstraints -> false, 'class -> "form-control")
+	        <button type="submit" class="btn btn-primary" value="Create">Create</button>
+		}
+	</div> 
+
+}

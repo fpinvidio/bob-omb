@@ -1,0 +1,26 @@
+@(productform: Form[Product], categories: List[Category])
+
+@import helper._
+@import fields._
+@implicitField = @{ FieldConstructor(bootstrapfield.f) }
+
+@main("PLiP Administration Panel") { 	
+	<h2>Add a new user</h2>
+	<div class="well well-lg col-md-6">
+		@form(routes.ProductController.createProduct(), 'class -> "form-horizontal") {
+			@inputText(productform("name"), '_label -> "Name", 'class -> "form-control")
+			@inputText(productform("weight"), '_label -> "Weight", 'class -> "form-control")
+			@inputText(productform("description"), '_label -> "Description", 'class -> "form-control")
+			@inputText(productform("code"), '_label -> "Code", 'class -> "form-control")
+			@inputText(productform("laboratory"), '_label -> "Laboratory", 'class -> "form-control")
+			@inputText(productform("image_number"), '_label -> "Image Number", 'class -> "form-control")
+			@checkbox(field = productform("enabled"), '_label -> "Enabled")
+			@select(productform("category.id"), categories.map{
+				c => c.id.toString -> c.description 
+			}, '_label -> "Category",
+	               '_showConstraints -> false, 'class -> "form-control")
+	        <button type="submit" class="btn btn-primary" value="Create">Create</button>
+		}
+	</div> 
+
+}

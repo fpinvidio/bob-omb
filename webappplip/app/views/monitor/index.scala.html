@@ -1,0 +1,20 @@
+@(message: String) @main("PLiP Administration Panel") {
+<div class="row">
+	<div class="page-header">
+		<div class="jumbotron">
+			<h1>Monitor</h1>
+			<h3>Realtime system monitoring</h3>
+		</div>
+	</div>
+</div>
+<div id="divver"></div>
+<div class="row">
+	<script type="text/javascript" charset="utf-8">
+        // Called for each Comet message
+        var productEntered = function() {
+            $('<p>Llego un producto</p>').appendTo('#divver');
+        }
+    </script> 
+    <iframe id="comet" src="@routes.MonitorController.liveFeed.unique"></iframe>
+</div>
+}
