@@ -1,29 +1,31 @@
 package controllers;
 
-import play.libs.Comet;
+import models.WebSocketChannel;
+import models.messages.InboundOrder;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.WebSocket;
 import actors.Monitor;
-import akka.actor.ActorRef;
+import views.html.monitor.index;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 public class MonitorController extends Controller {
-	
-	final static ActorRef monitor = Monitor.instance;
-	
 	public static Result index() {
-		return ok(views.html.monitor.index.render(""));
+		return ok(index.render(""));
 	}
-	
-	public static Result liveFeed() {
-        return ok(new Comet("parent.productEntered") {  
-            public void onConnected() {
-               monitor.tell(this, null); 
-            } 
-        });
-    }
-	
+
+	public static WebSocket<JsonNode> messageWs() {
+		return new WebSocket<JsonNode>() {
+			public void onReady(WebSocket.In<JsonNode> in,
+					WebSocket.Out<JsonNode> out) {
+				Monitor.register(new WebSocketChannel<JsonNode>(in, out));
+			}
+		};
+	}
+
 	public static Result orderReceived() {
-		monitor.tell("TICK", null);
+		Monitor.instance.tell(new InboundOrder("Order Received"), null);
 		return ok("");
 	}
 }

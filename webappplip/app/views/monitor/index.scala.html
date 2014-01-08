@@ -7,14 +7,19 @@
 		</div>
 	</div>
 </div>
-<div id="divver"></div>
+<div id="ping"></div>
 <div class="row">
 	<script type="text/javascript" charset="utf-8">
-        // Called for each Comet message
-        var productEntered = function() {
-            $('<p>Llego un producto</p>').appendTo('#divver');
-        }
+        $(function() {
+        	var WS = window['MozWebSocket'] ? MozWebSocket : WebSocket
+  		    var dateSocket = new WS("@routes.MonitorController.messageWs().webSocketURL(request)")
+
+  		    var receiveEvent = function(event) {
+  		        $("#ping").append("Last ping: "+event.data);
+  		    }
+
+  		    dateSocket.onmessage = receiveEvent
+        });
     </script> 
-    <iframe id="comet" src="@routes.MonitorController.liveFeed.unique"></iframe>
 </div>
 }

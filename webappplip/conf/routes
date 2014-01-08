@@ -8,7 +8,7 @@ GET     /                           	controllers.Application.index()
 # Monitor page
 
 GET		/monitor						controllers.MonitorController.index()
-GET		/monitor/feed					controllers.MonitorController.liveFeed()
+GET		/monitor/socket					controllers.MonitorController.messageWs()
 GET		/monitor/receive				controllers.MonitorController.orderReceived()
 
 # User page
