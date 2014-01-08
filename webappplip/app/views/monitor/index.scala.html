@@ -1,25 +1,61 @@
 @(message: String) @main("PLiP Administration Panel") {
+<script>
+	$(function() {
+		$('#inner_content_div').slimScroll({
+			height : '250px'
+		});
+	});
+</script>
 <div class="row">
 	<div class="page-header">
-		<div class="jumbotron">
-			<h1>Monitor</h1>
-			<h3>Realtime system monitoring</h3>
+		<h1>Monitor</h1>
+	</div>
+	<div class="col-md-8">
+		<img data-src="holder.js/200x200" class="img-thumbnail" alt="200x200"
+			style="width: 200px; height: 200px;"
+			src="data:image/png;base64,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">
+	</div>
+	<div class="col-md-4">
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-bell-o"></i>Recent Activity
+				</div>
+			</div>
+			<div class="portlet-body">
+				<div id="inner_content_div" class="scroller">
+					<ul class="feeds" id="live_feed">
+						<li id="first_line">No activity detected.</li>
+					</ul>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
-<div id="ping"></div>
 <div class="row">
 	<script type="text/javascript" charset="utf-8">
-        $(function() {
-        	var WS = window['MozWebSocket'] ? MozWebSocket : WebSocket
-  		    var dateSocket = new WS("@routes.MonitorController.messageWs().webSocketURL(request)")
+		function buildFeed(event) {
+			var eventObj = JSON.parse(event.data);
+			var resultHTML = '<li><div class="col-md-8">'
+					+ eventObj.text
+					+ '</div><div class="col-md-4 abbr_time"><i><abbr class="timeago" title="'
+					+ new Date().toISOString() + '"></abbr></i></div></li>';
+			return resultHTML;
+		}
+		$(function() {
+			var WS = window['MozWebSocket'] ? MozWebSocket : WebSocket
+			var dateSocket = new WS(
+					"@routes.MonitorController.messageWs().webSocketURL(request)")
 
-  		    var receiveEvent = function(event) {
-  		        $("#ping").append("Last ping: "+event.data);
-  		    }
+			var receiveEvent = function(event) {
+				$("#first_line").hide();
+				$("#live_feed").append(buildFeed(event));
+				jQuery("abbr.timeago").timeago();
+				jQuery.timeago(new Date());
+			}
 
-  		    dateSocket.onmessage = receiveEvent
-        });
-    </script> 
+			dateSocket.onmessage = receiveEvent
+		});
+	</script>
 </div>
 }
