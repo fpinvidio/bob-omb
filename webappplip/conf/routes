@@ -9,7 +9,7 @@ GET     /                           	controllers.Application.index()
 
 GET		/monitor						controllers.MonitorController.index()
 GET		/monitor/socket					controllers.MonitorController.messageWs()
-GET		/monitor/receive				controllers.MonitorController.orderReceived()
+POST	/monitor/receive				controllers.MonitorController.orderReceived()
 
 # User page
 

@@ -1,10 +1,11 @@
 @(message: String, products: List[Product]) @main("PLiP Administration Panel") {
 <div class="row">
 	<div class="page-header">
-		<div class="jumbotron">
-			<h1>Products</h1>
-			<h3>Realtime system monitoring</h3>
-		</div>
+		<ol class="breadcrumb">
+		  <li><a href="/">Home</a></li>
+		  <li class="active">Products</li>
+		</ol>
+		<h1>Products</h1>
 	</div>
 </div>
 <div class="row">
@@ -20,7 +21,32 @@
 			</tr>
 		</thead>
 		<tbody>
+			@for(product <- products) {
+                    <tr>
+                        <td>@product.name</td>
+                        <td>@product.description</td>
+                        <td>@product.laboratory</td>
+                        <td>
+                            @if(product.enabled == 0) {
+                                <em>-</em>
+                            } else {
+                                <p>Active</p>
+                            }
+                        </td>
+                        <td>@product.code</td>
+                        <td>@product.weight</td>
+                    </tr>
+                }
 		</tbody>
 	</table>
+	<ul class="pagination pull-right">
+	  <li><a href="#">&laquo;</a></li>
+	  <li><a href="#">1</a></li>
+	  <li><a href="#">2</a></li>
+	  <li><a href="#">3</a></li>
+	  <li><a href="#">4</a></li>
+	  <li><a href="#">5</a></li>
+	  <li><a href="#">&raquo;</a></li>
+	</ul>
 </div>
 }

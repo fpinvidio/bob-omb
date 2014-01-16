@@ -8,6 +8,10 @@
 </script>
 <div class="row">
 	<div class="page-header">
+		<ol class="breadcrumb">
+		  <li><a href="/">Home</a></li>
+		  <li class="active">Monitor</li>
+		</ol>
 		<h1>Monitor</h1>
 	</div>
 	<div class="col-md-8">
@@ -19,7 +23,7 @@
 		<div class="portlet box blue">
 			<div class="portlet-title">
 				<div class="caption">
-					<i class="fa fa-bell-o"></i>Recent Activity
+					Recent Activity
 				</div>
 			</div>
 			<div class="portlet-body">
@@ -34,10 +38,10 @@
 </div>
 <div class="row">
 	<script type="text/javascript" charset="utf-8">
-		function buildFeed(event) {
-			var eventObj = JSON.parse(event.data);
-			var resultHTML = '<li><div class="col-md-8">'
-					+ eventObj.text
+		function buildFeed(order) {
+			var resultHTML = '<li><div class="col-md-8"><span class="glyphicon glyphicon-bullhorn"></span> '
+					+ 'Order Arrived - '
+					+ order.code
 					+ '</div><div class="col-md-4 abbr_time"><i><abbr class="timeago" title="'
 					+ new Date().toISOString() + '"></abbr></i></div></li>';
 			return resultHTML;
@@ -49,9 +53,11 @@
 
 			var receiveEvent = function(event) {
 				$("#first_line").hide();
-				$("#live_feed").append(buildFeed(event));
+				var result = JSON.parse(JSON.parse(event.data).text);
+				$("#live_feed").append(buildFeed(result.object));
 				jQuery("abbr.timeago").timeago();
 				jQuery.timeago(new Date());
+				$(".alert").alert();
 			}
 
 			dateSocket.onmessage = receiveEvent

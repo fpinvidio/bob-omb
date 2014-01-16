@@ -9,10 +9,9 @@ import javax.persistence.Table;
 
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
-import play.db.ebean.Model.Finder;
 
 @Entity
-@Table(name = "Product")
+@Table(name = "product")
 public class Product extends Model {
 
 	private static final long serialVersionUID = 1L;
@@ -21,18 +20,18 @@ public class Product extends Model {
 	public Long id;
 	@Required
 	public String name;
-	@Required
+	public Long weight;
 	public String description;
 	@Required
-	public String laboratory;
-	@Required
-	public Boolean enabled;
 	public Long code;
-	public Long image_number;
-	public Long weight;
+	@Required
+	public String laboratory;
 	@ManyToOne
 	@JoinColumn(name="id_product_category")
 	public Category category;
+	public Long image_number;
+	@Required
+	public short enabled;
 	
 	public static Finder<Long, Product> find = new Finder<Long, Product>(Long.class,
 			Product.class);

@@ -9,22 +9,22 @@ import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
 @Entity
-@Table(name = "Product_Category")
-public class Category extends Model{
+@Table(name = "page_image")
+public class PageImage extends Model{
 
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@Column(name = "id_product_type")
+	@Column(name = "id_page_image")
 	public Long id;
 	@Required
-	public String name;
+	public String path;
 	
-	public static void create(Category category) {
-		category.save();
+	public static void create(PageImage page_image) {
+		page_image.save();
 	}
 
-	public static Finder<Long, Category> find = new Finder<Long, Category>(Long.class,
-			Category.class);
+	public static Finder<Long, PageImage> find = new Finder<Long, PageImage>(Long.class,
+			PageImage.class);
 
 }

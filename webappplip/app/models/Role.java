@@ -15,7 +15,7 @@ import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
 @Entity
-@Table(name = "Plip_Role")
+@Table(name = "plip_role")
 public class Role extends Model {
 
 	private static final long serialVersionUID = 1L;

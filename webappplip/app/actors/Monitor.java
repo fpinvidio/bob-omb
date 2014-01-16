@@ -9,7 +9,6 @@ import play.libs.Akka;
 import play.libs.F.Callback;
 import play.libs.F.Callback0;
 import play.libs.Json;
-import play.mvc.WebSocket;
 import akka.actor.ActorRef;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
@@ -26,7 +25,7 @@ public class Monitor extends UntypedActor {
 
 	public void onReceive(Object message) {
 		if (message instanceof InboundOrder) {
-			notifyAll("Order Arrived - " + ((InboundOrder) message).getText());
+			notifyAll(((InboundOrder) message).getOrderJSON());
 		} else {
 			unhandled(message);
 		}
