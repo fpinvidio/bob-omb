@@ -2,6 +2,7 @@ package models;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -19,10 +20,7 @@ public class PageProduct extends Model{
 	@Id
 	@Column(name = "id_page_product")
 	public Long id;
-	@ManyToOne
-	@JoinColumn(name="id_page")
-	public Page page;
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="id_product")
 	public Product product;
 	@Required
@@ -31,5 +29,8 @@ public class PageProduct extends Model{
 	public static void create(PageProduct page_product) {
 		page_product.save();
 	}
+	
+	public static Finder<Long, PageProduct> find = new Finder<Long, PageProduct>(Long.class,
+			PageProduct.class);
 
 }

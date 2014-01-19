@@ -1,29 +1,29 @@
 package models.messages;
 
-import models.Order;
+import models.Page;
 import play.libs.Json;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class InboundOrder {
+public class InboundPage {
 
-	private Order order;
+	private Page page;
 
-	public InboundOrder(Order order) {
-		this.order = order;
+	public InboundPage(Page page) {
+		this.page = page;
 	}
 
-	public Order getOrder() {
-		return order;
+	public Page getPage() {
+		return page;
 	}
 	
-	public String getOrderJSON() {
+	public String getPageJSON() {
 		ObjectMapper mapper = new ObjectMapper();
 		ObjectNode onode = mapper.createObjectNode();
-		JsonNode jnode = Json.toJson(order);
-		onode.put("type", "order");
+		JsonNode jnode = Json.toJson(page);
+		onode.put("type", "page");
 		onode.put("object", jnode);
 		return onode.toString();
 	}

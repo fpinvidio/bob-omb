@@ -20,18 +20,25 @@ public class Product extends Model {
 	public Long id;
 	@Required
 	public String name;
-	public Long weight;
+	public int weight;
 	public String description;
 	@Required
-	public Long code;
+	public int code;
 	@Required
 	public String laboratory;
 	@ManyToOne
 	@JoinColumn(name="id_product_category")
 	public Category category;
-	public Long image_number;
+	public int image_number;
 	@Required
 	public short enabled;
+	/*
+	@JsonIgnore
+	@OneToMany(cascade = CascadeType.ALL, mappedBy="product")
+	public List<PageProduct> page_products;
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="id_product", referencedColumnName="id_product")
+	public List<PageProduct> page_products;*/
 	
 	public static Finder<Long, Product> find = new Finder<Long, Product>(Long.class,
 			Product.class);

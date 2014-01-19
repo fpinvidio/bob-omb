@@ -9,7 +9,7 @@ GET     /                           	controllers.Application.index()
 
 GET		/monitor						controllers.MonitorController.index()
 GET		/monitor/socket					controllers.MonitorController.messageWs()
-POST	/monitor/receive				controllers.MonitorController.orderReceived()
+POST	/monitor/receive				controllers.MonitorController.pageReceived()
 
 # User page
 
@@ -22,6 +22,7 @@ POST /user/create						controllers.UserController.createUser()
 GET /product							controllers.ProductController.index()
 GET /product/create						controllers.ProductController.newProduct()
 POST /product/create					controllers.ProductController.createProduct()
+POST /product/upload					controllers.ProductController.upload()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               	controllers.Assets.at(path="/public", file)

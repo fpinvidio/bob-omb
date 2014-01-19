@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import models.WebSocketChannel;
-import models.messages.InboundOrder;
+import models.messages.InboundPage;
 import play.libs.Akka;
 import play.libs.F.Callback;
 import play.libs.F.Callback0;
@@ -24,8 +24,8 @@ public class Monitor extends UntypedActor {
 	private static List<WebSocketChannel<JsonNode>> members = new ArrayList<WebSocketChannel<JsonNode>>();
 
 	public void onReceive(Object message) {
-		if (message instanceof InboundOrder) {
-			notifyAll(((InboundOrder) message).getOrderJSON());
+		if (message instanceof InboundPage) {
+			notifyAll(((InboundPage) message).getPageJSON());
 		} else {
 			unhandled(message);
 		}

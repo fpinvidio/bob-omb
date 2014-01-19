@@ -1,14 +1,15 @@
 package controllers;
 
-import models.Order;
+import models.Page;
 import models.WebSocketChannel;
-import models.messages.InboundOrder;
+import models.messages.InboundPage;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.WebSocket;
 import views.html.monitor.index;
 import actors.Monitor;
 
+import com.avaje.ebean.FetchConfig;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class MonitorController extends Controller {
@@ -25,15 +26,15 @@ public class MonitorController extends Controller {
 		};
 	}
 
-	public static Result orderReceived() {
+	public static Result pageReceived() {
 		JsonNode json = request().body().asJson();
-		String order_id = json.findPath("order_id").textValue();
-		if (order_id == null) {
+		String page_id = json.findPath("page_id").textValue();
+		if (page_id == null) {
 			return badRequest("Missing parameter [name]");
 		} else {
-			Long id = Long.parseLong(order_id);
-			Order order = Order.find.byId(id);
-			Monitor.instance.tell(new InboundOrder(order), null);
+			Long id = Long.parseLong(page_id);
+			Page page = Page.find.fetch("page_products", new FetchConfig().query()).fetch("page_products.product").where().eq("t0.id_page", id).findUnique();
+			Monitor.instance.tell(new InboundPage(page), null);
 			return ok("Hello ");
 		}
 	}
