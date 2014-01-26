@@ -1,10 +1,14 @@
 package models;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import play.data.validation.Constraints.Required;
@@ -30,8 +34,32 @@ public class Product extends Model {
 	@JoinColumn(name="id_product_category")
 	public Category category;
 	public int image_number;
-	@Required
-	public short enabled;
+	public boolean enabled;
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="id_product", referencedColumnName="id_product")
+	public List<Image> images;
+	
+	public Product() {
+		super();
+		this.enabled = false;
+	}
+	
+	public Product(Long id, String name, int weight, String description,
+			int code, String laboratory, Category category, int image_number,
+			boolean enabled, List<Image> images) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.weight = weight;
+		this.description = description;
+		this.code = code;
+		this.laboratory = laboratory;
+		this.category = category;
+		this.image_number = image_number;
+		this.enabled = enabled;
+		this.images = images;
+	}
+
 	/*
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="product")

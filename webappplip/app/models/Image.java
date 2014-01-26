@@ -3,6 +3,8 @@ package models;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import play.data.validation.Constraints.Required;
@@ -19,5 +21,14 @@ public class Image extends Model {
 	@Required
 	public String path;
 	public String name;
+	public boolean trained;
+	@ManyToOne
+	@JoinColumn(name="id_position", referencedColumnName="id_position")
+	public Position position;
+	
+	public Image() {
+		super();
+		this.trained = false;
+	}
 
 }

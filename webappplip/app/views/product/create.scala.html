@@ -5,7 +5,7 @@
 @implicitField = @{ FieldConstructor(bootstrapfield.f) }
 
 @main("PLiP Administration Panel") { 	
-	<h2>Add a new user</h2>
+	<h2>Add a new product</h2>
 	<div class="well well-lg col-md-6">
 		@form(routes.ProductController.createProduct(), 'class -> "form-horizontal") {
 			@inputText(productform("name"), '_label -> "Name", 'class -> "form-control")
@@ -13,7 +13,9 @@
 			@inputText(productform("description"), '_label -> "Description", 'class -> "form-control")
 			@inputText(productform("code"), '_label -> "Code", 'class -> "form-control")
 			@inputText(productform("laboratory"), '_label -> "Laboratory", 'class -> "form-control")
-			@inputText(productform("image_number"), '_label -> "Image Number", 'class -> "form-control")
+			@defining(productform("image_number")) { image_number =>
+			  <input type="hidden" name="@image_number.name" id="@image_number.id" value="@image_number.value">
+			}
 			@checkbox(field = productform("enabled"), '_label -> "Enabled")
 			@select(productform("category.id"), categories.map{
 				c => c.id.toString -> c.name 
@@ -21,38 +23,22 @@
 	               '_showConstraints -> false, 'class -> "form-control")
 	        <button type="submit" class="btn btn-primary" value="Create">Create</button>
 		}
-		<div>
-			<span class="btn btn-success fileinput-button">
-		        <i class="glyphicon glyphicon-plus"></i>
-		        <span>Add files...</span>
-		        <!-- The file input field used as target for the file upload widget -->
-		        <input id="fileupload" type="file" name="files[]" multiple>
-		    </span>
-		    <br>
-		    <br>
-		    <!-- The global progress bar -->
-		    <div id="progress" class="progress">
-		        <div class="progress-bar progress-bar-success"></div>
-		    </div>
-		    <!-- The container for the uploaded files -->
-		    <div id="files" class="files"></div>
-		    <br>
-		    <div class="panel panel-default">
-		        <div class="panel-heading">
-		            <h3 class="panel-title">Demo Notes</h3>
-		        </div>
-		        <div class="panel-body">
-		            <ul>
-		                <li>The maximum file size for uploads in this demo is <strong>5 MB</strong> (default file size is unlimited).</li>
-		                <li>Only image files (<strong>JPG, GIF, PNG</strong>) are allowed in this demo (by default there is no file type restriction).</li>
-		                <li>Uploaded files will be deleted automatically after <strong>5 minutes</strong> (demo setting).</li>
-		                <li>You can <strong>drag &amp; drop</strong> files from your desktop on this webpage (see <a href="https://github.com/blueimp/jQuery-File-Upload/wiki/Browser-support">Browser support</a>).</li>
-		                <li>Please refer to the <a href="https://github.com/blueimp/jQuery-File-Upload">project website</a> and <a href="https://github.com/blueimp/jQuery-File-Upload/wiki">documentation</a> for more information.</li>
-		                <li>Built with Twitter's <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> CSS framework and Icons from <a href="http://glyphicons.com/">Glyphicons</a>.</li>
-		            </ul>
-		        </div>
-		    </div>
-		</div>
+	</div>
+	<div class="col-md-6">
+		<span class="btn btn-success fileinput-button">
+	        <i class="glyphicon glyphicon-plus"></i>
+	        <span>Add images...</span>
+	        <!-- The file input field used as target for the file upload widget -->
+	        <input id="fileupload" type="file" name="files[]" multiple>
+	    </span>
+	    <br>
+	    <br>
+	    <!-- The global progress bar -->
+	    <div id="progress" class="progress">
+	        <div class="progress-bar progress-bar-success"></div>
+	    </div>
+	    <!-- The container for the uploaded files -->
+	    <div id="files" class="files"></div>
 	</div>
 	
 <script>
@@ -60,10 +46,9 @@
 /*global window, $ */
 $(function () {
     'use strict';
+    var image_number = 0;
     // Change this to the location of your server-side upload handler:
-    var url = window.location.hostname === 'blueimp.github.io' ?
-                '//jquery-file-upload.appspot.com/' : 'server/php/',
-        uploadButton = $('<button/>')
+    var uploadButton = $('<button/>')
             .addClass('btn btn-primary')
             .prop('disabled', true)
             .text('Processing...')
@@ -82,7 +67,7 @@ $(function () {
                 });
             });
     $('#fileupload').fileupload({
-        url: url,
+        url: '/product/uploadimages',
         dataType: 'json',
         autoUpload: false,
         acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
@@ -140,6 +125,11 @@ $(function () {
                     .prop('href', file.url);
                 $(data.context.children()[index])
                     .wrap(link);
+                image_number++;
+                $('#image_number').val(image_number);
+                $("<input type='hidden' value='"+file.url+"' />")
+	                .attr("name", "files[]")
+	                .prependTo("form");
             } else if (file.error) {
                 var error = $('<span class="text-danger"/>').text(file.error);
                 $(data.context.children()[index])
