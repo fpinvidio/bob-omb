@@ -53,9 +53,10 @@
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class=@{if (request.path == routes.Application.index().toString()) "active" else ""}><a href="@routes.Application.index()">Home</a></li>
+            <li class=@{if (request.path == routes.ApplicationController.index().toString()) "active" else ""}><a href="@routes.ApplicationController.index()">Home</a></li>
             <li class=@{if (request.path == routes.MonitorController.index().toString()) "active" else ""}><a href="@routes.MonitorController.index()">Monitor</a></li>
-            <li class=@{if (request.path == routes.ProductController.index().toString()) "active" else ""}><a href="@routes.ProductController.index()">Products</a>
+            <li class=@{if (request.path == routes.ProductController.index().toString()) "active" else ""}><a href="@routes.ProductController.index()">Products</a></li>
+            <li class=@{if (request.path == routes.ApplicationController.login().toString()) "active" else ""}><a href="@routes.ApplicationController.login()">Login</a></li>
             <li><a href="#about">History</a></li>
             <li><a href="#contact">Contact</a></li>
           </ul>

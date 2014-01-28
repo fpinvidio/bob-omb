@@ -3,7 +3,9 @@
 # ~~~~
 
 # Home page
-GET     /                           	controllers.Application.index()
+GET     /                           	controllers.ApplicationController.index()
+GET     /login                         	controllers.ApplicationController.login()
+POST    /login                      	controllers.ApplicationController.authenticate()
 
 # Monitor page
 

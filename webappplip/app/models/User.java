@@ -1,5 +1,7 @@
 package models;
 
+import helpers.HashHelper;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -9,6 +11,7 @@ import javax.persistence.Table;
 
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
+import exceptions.EmptyPasswordException;
 
 @Entity
 @Table(name = "Plip_User")
@@ -36,7 +39,19 @@ public class User extends Model {
 	public Role role;
 
 	public static void create(User user) {
-		user.save();
+		try {
+			user.password = HashHelper.createPassword(user.password);
+			user.save();
+		} catch (EmptyPasswordException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static Finder<Long, User> find = new Finder<Long, User>(Long.class,
+			User.class);
+	
+	public static User authenticate(String username) {
+		return User.find.where().eq("username", username).findUnique();
 	}
 
 }

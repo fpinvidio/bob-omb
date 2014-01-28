@@ -1,0 +1,20 @@
+@(loginForm: Form[Login])
+
+@import helper._
+@import fields._
+@implicitField = @{ FieldConstructor(bootstrapfield.f) }
+
+@main("PLiP Administration Panel") { 	
+	<div class="well well-lg col-md-6">
+		@if(loginForm.hasGlobalErrors) {
+		    <p class="error">
+		        @loginForm.globalError.message
+		    </p>
+		}
+		@form(routes.ApplicationController.authenticate(), 'class -> "form-horizontal") {
+			@inputText(loginForm("username"), '_label -> "Username", 'class -> "form-control")
+			@inputPassword(loginForm("password"), '_label -> "Password", 'class -> "form-control")
+	        <button type="submit" class="btn btn-primary" value="Create">Login</button>
+		}
+	</div>
+}
