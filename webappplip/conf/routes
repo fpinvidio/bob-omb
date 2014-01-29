@@ -5,6 +5,7 @@
 # Home page
 GET     /                           	controllers.ApplicationController.index()
 GET     /login                         	controllers.ApplicationController.login()
+GET     /logout                     	controllers.ApplicationController.logout()
 POST    /login                      	controllers.ApplicationController.authenticate()
 
 # Monitor page
@@ -18,6 +19,12 @@ POST	/monitor/receive				controllers.MonitorController.pageReceived()
 GET /user								controllers.UserController.index()
 GET /user/create						controllers.UserController.newUser()
 POST /user/create						controllers.UserController.createUser()
+
+# Category page
+
+GET /category							controllers.CategoryController.index()
+GET /category/create					controllers.CategoryController.newCategory()
+POST /category/create					controllers.CategoryController.createCategory()
 
 # Product page
 

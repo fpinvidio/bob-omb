@@ -53,5 +53,9 @@ public class User extends Model {
 	public static User authenticate(String username) {
 		return User.find.where().eq("username", username).findUnique();
 	}
+	
+	public boolean isAdmin() {
+		return "Admin".equals(role.name);
+	}
 
 }

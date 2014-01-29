@@ -1,0 +1,16 @@
+@(categoryForm: Form[Category])
+
+@import helper._
+@import fields._
+@implicitField = @{ FieldConstructor(bootstrapfield.f) }
+
+@main("PLiP Administration Panel") { 	
+	<h2>Add a new category</h2>
+	<div class="well well-lg col-md-6">
+		@form(routes.CategoryController.createCategory(), 'class -> "form-horizontal") {
+			@inputText(categoryForm("name"), '_label -> "Name", 'class -> "form-control")
+	        <button type="submit" class="btn btn-primary" value="Create">Create</button>
+		}
+	</div> 
+
+}

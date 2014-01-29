@@ -15,7 +15,7 @@ public class Login {
 		User user = User.authenticate(username);
 		if (user != null) {
 			if (HashHelper.checkPassword(password, user.password)) {
-				result_message = "Successfully logged in";
+				return null;
 			}
 		}
 		return result_message;
