@@ -7,9 +7,11 @@ import models.User;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.Security;
 import views.html.user.create;
 import views.html.user.index;
 
+@Security.Authenticated(SecuredAuthenticator.class)
 public class UserController extends Controller {
 	static Form<User> userForm = Form.form(User.class);
 	static List<Role> roles = Role.find.all();

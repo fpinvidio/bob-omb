@@ -16,6 +16,7 @@ import org.apache.commons.io.FileUtils;
 import play.Play;
 import play.data.Form;
 import play.mvc.Controller;
+import play.mvc.Security;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
@@ -27,12 +28,22 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+@Security.Authenticated(SecuredAuthenticator.class)
 public class ProductController extends Controller {
 	static Form<Product> productForm = Form.form(Product.class);
 	static List<Category> categories = Category.find.all();
-
+	
 	public static Result index() {
-		return ok(index.render("", Product.find.all()));
+		return redirect(routes.ProductController.index(0, "name", "asc", ""));
+	}
+	
+	public static Result index(int page, String sortBy, String order, String filter) {
+		return ok(
+            index.render(
+                Product.page(page, 5, sortBy, order, filter),
+                sortBy, order, filter
+            )
+        );
 	}
 
 	public static Result newProduct() {
@@ -54,7 +65,7 @@ public class ProductController extends Controller {
 			}
 			flash("success", "Product " + filledForm.get().name
 					+ " has been created.");
-			return redirect(routes.ProductController.index());
+			return index();
 		}
 	}
 
@@ -81,7 +92,7 @@ public class ProductController extends Controller {
 				saved_files.add(saved_file);
 			} else {
 				flash("error", "Missing file");
-				return redirect(routes.ProductController.index());
+				return index();
 			}
 		}
 		return ok(generateResponse(saved_files));
@@ -109,7 +120,7 @@ public class ProductController extends Controller {
 
 	public static File saveFile(FilePart picture) {
 		String fileName = picture.getFilename();
-		String contentType = picture.getContentType();
+		//String contentType = picture.getContentType();
 		File file = picture.getFile();
 		String path = getDirectoryPath(fileName);
 		File destination = new File(path);

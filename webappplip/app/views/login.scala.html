@@ -2,24 +2,30 @@
 
 @import helper._
 @import fields._
-@implicitField = @{ FieldConstructor(bootstrapfield.f) }
+@implicitField = @{ FieldConstructor(signinfield.f) }
 
-@main("PLiP Administration Panel") { 	
-	@if(flash.contains("success")) {
-	    <p class="success">
-	        @flash.get("success")
-	    </p>
-	}
-	<div class="well well-lg col-md-6">
-		@if(loginForm.hasGlobalErrors) {
-		    <p class="error">
-		        @loginForm.globalError.message
+@main("Login") { 	
+	<div class="row">
+		@if(flash.contains("success")) {
+		    <p class="success">
+		        @flash.get("success")
 		    </p>
 		}
-		@form(routes.ApplicationController.authenticate(), 'class -> "form-horizontal") {
-			@inputText(loginForm("username"), '_label -> "Username", 'class -> "form-control")
-			@inputPassword(loginForm("password"), '_label -> "Password", 'class -> "form-control")
-	        <button type="submit" class="btn btn-primary" value="Create">Login</button>
-		}
+		<div class="col-md-6 col-md-offset-3">
+			@form(routes.ApplicationController.authenticate(), 'class -> "form-signin") {
+				<h2 class="form-signin-heading">Please sign in</h2>
+				@if(loginForm.hasGlobalErrors) {
+				    <p class="error">
+				        @loginForm.globalError.message
+				    </p>
+				}
+				@inputText(loginForm("username"), 'placeholder -> "Username", 'class -> "form-control")
+				@inputPassword(loginForm("password"), 'placeholder -> "Password", 'class -> "form-control")
+				<label class="checkbox">
+		          <input type="checkbox" value="remember-me"> Remember me
+		        </label>
+		        <button type="submit" class="btn btn-lg btn-primary btn-block" value="Create">Login</button>
+			}
+		</div>
 	</div>
 }

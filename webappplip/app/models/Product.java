@@ -11,6 +11,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.avaje.ebean.Page;
+
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
@@ -74,5 +76,15 @@ public class Product extends Model {
 	public static void create(Product product) {
 		product.save();
 	}
+	
+	public static Page<Product> page(int page, int pageSize, String sortBy, String order, String filter) {
+		return 
+            find.where()
+                .ilike("name", "%" + filter + "%")
+                .orderBy(sortBy + " " + order)
+                .findPagingList(pageSize)
+                .setFetchAhead(false)
+                .getPage(page);
+    }
 
 }

@@ -1,9 +1,64 @@
-@(message: String) @main("PLiP | Administration Panel") {
+@(message: String) @main("Administration Panel") {
 <div class="row">
-	<div class="page-header">
-		<div class="jumbotron">
-			<h1>Welcome to PLiP</h1>
-			<p>Administration Panel</p>
+<div class="page-header">
+		<h1>Welcome to PLiP</h1>
+		<p>Administration Panel</p>
+	</div>
+	<div class="col-md-3">
+		<div class="dashboard-widget turquoise">
+			<div class="visual">
+				<i class="fa fa-bar-chart-o fa-5x"></i>
+			</div>
+			<div class="details">
+				<div class="number">2</div>
+				<div class="desc">Pedidos del mes</div>
+			</div>
+			<a class="more green-sea">Ver Más <i
+				class="fa fa-angle-right fa-2x more-icon"></i>
+			</a>
+		</div>
+	</div>
+	<!-- end div span3-->
+	<div class="col-md-3">
+		<div class="dashboard-widget sunflower">
+			<div class="visual">
+				<i class="fa fa-bookmark-o fa-5x"></i>
+			</div>
+			<div class="details">
+				<div class="number">3</div>
+				<div class="desc">Pedidos pendientes</div>
+			</div>
+			<a class="more orange">Ver Más <i
+				class="fa fa-angle-right fa-2x more-icon"></i>
+			</a>
+		</div>
+	</div>
+	<div class="col-md-3">
+		<div class="dashboard-widget peter-river">
+			<div class="visual">
+				<i class="fa fa-calendar fa-5x"></i>
+			</div>
+			<div class="details">
+				<div class="number">4</div>
+				<div class="desc">Órdenes del día</div>
+			</div>
+			<a class="more belize-hole">Ver Más <i
+				class="fa fa-angle-right fa-2x more-icon"></i>
+			</a>
+		</div>
+	</div>
+	<div class="col-md-3">
+		<div class="dashboard-widget alizarin">
+			<div class="visual">
+				<i class="fa fa-warning fa-5x"></i>
+			</div>
+			<div class="details">
+				<div class="number">5</div>
+				<div class="desc">Items sin stock</div>
+			</div>
+			<a class="more pomegranate">Ver Más <i
+				class="fa fa-angle-right fa-2x more-icon"></i>
+			</a>
 		</div>
 	</div>
 </div>

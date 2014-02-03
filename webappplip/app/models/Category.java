@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.avaje.ebean.Page;
+
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
@@ -26,5 +28,15 @@ public class Category extends Model{
 
 	public static Finder<Long, Category> find = new Finder<Long, Category>(Long.class,
 			Category.class);
+	
+	public static Page<Category> page(int page, int pageSize, String sortBy, String order, String filter) {
+		return 
+            find.where()
+                .ilike("name", "%" + filter + "%")
+                .orderBy(sortBy + " " + order)
+                .findPagingList(pageSize)
+                .setFetchAhead(false)
+                .getPage(page);
+    }
 
 }

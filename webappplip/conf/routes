@@ -22,13 +22,16 @@ POST /user/create						controllers.UserController.createUser()
 
 # Category page
 
-GET /category							controllers.CategoryController.index()
+GET /category							controllers.CategoryController.index(p:Int ?= 0, s ?= "name", o ?= "asc", f ?= "")
 GET /category/create					controllers.CategoryController.newCategory()
 POST /category/create					controllers.CategoryController.createCategory()
+GET /category/:id              			controllers.CategoryController.show(id:Long)
+GET /category/:id/edit              	controllers.CategoryController.edit(id:Long)
+POST /category/:id/edit              	controllers.CategoryController.update(id:Long)
 
 # Product page
 
-GET /product							controllers.ProductController.index()
+GET /product							controllers.ProductController.index(p:Int ?= 0, s ?= "name", o ?= "asc", f ?= "")
 GET /product/create						controllers.ProductController.newProduct()
 POST /product/create					controllers.ProductController.createProduct()
 POST /product/uploadimages				controllers.ProductController.uploadImages()

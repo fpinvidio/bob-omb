@@ -1,11 +1,139 @@
-@(message: String) @main("PLiP Administration Panel") {
-<div class="row">
-	<div class="page-header">
+@(currentPage: com.avaje.ebean.Page[Category], currentSortBy: String, currentOrder: String, currentFilter: String) 
+
+@****************************************
+* Helper generating navigation links    *
+****************************************@
+@link(newPage:Int, newSortBy:String) = @{
+    
+    var sortBy = currentSortBy
+    var order = currentOrder
+    
+    if(newSortBy != null) {
+        sortBy = newSortBy
+        if(currentSortBy == newSortBy) {
+            if(currentOrder == "asc") {
+                order = "desc"
+            } else {
+                order = "asc"
+            }
+        } else {
+            order = "asc"
+        }
+    }
+    
+    // Generate the link
+    routes.CategoryController.index(newPage, sortBy, order, currentFilter)
+    
+}
+
+@**********************************
+* Helper generating table headers *
+***********************************@
+@header(key:String, title:String) = {
+    <th class="@key.replace(".","_") header @if(currentSortBy == key) @{if(currentOrder == "asc") "headerSortDown" else "headerSortUp"}">
+        <a href="@link(0, key)">@title</a>
+    </th>
+}
+
+@main("Categories") {
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('[data-toggle=offcanvas]').click(function() {
+			$('.row-offcanvas').toggleClass('active');
+		});
+	});
+</script>
+<div class="row row-offcanvas row-offcanvas-right">
+	<div class="col-xs-12 col-sm-9 ">
 		<ol class="breadcrumb">
-		  <li><a href="/">Home</a></li>
-		  <li class="active">Categories</li>
+			<li><a href="/">Home</a></li>
+			<li class="active">Categories</li>
 		</ol>
+		@if(flash.containsKey("success")) {
+			<div class="alert alert-success alert-dismissable">
+			  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			  <strong>Success!</strong> @flash.get("success")
+			</div>
+	    }
 		<h1>Categories</h1>
+		
+		<div id="actions" class="small-margin">
+	        <form action="@link(0, "name")" method="GET">
+	        	<div class="col-xs-3">
+		            <input type="search" id="searchbox" name="f" value="@currentFilter" class="form-control" placeholder="Filter by category name...">
+	            </div>
+	            <input type="submit" id="searchsubmit" value="Filter" class="btn btn-primary">
+	        </form>
+	        
+	        <!-- <a class="btn success" id="add" href="@routes.ProductController.newProduct()">Add a new product</a> -->
+	        
+	    </div>
+	    
+	    @if(currentPage.getTotalRowCount == 0) {
+        
+	        <div class="well">
+	            <em>Nothing to display</em>
+	        </div>
+	        
+	    } else {
+	    	<div class="col-md-12">
+				<table class="table table-hover table-bordered table-striped">
+					<thead>
+						<tr>
+							@header("name", "Name")
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						@for(category <- currentPage.getList) {
+			                    <tr>
+			                        <td>@category.name</td>
+			                        <td style="width: 50px">
+				                        <a class="view" title="View" href="@routes.CategoryController.show(category.id)"><span class="glyphicon glyphicon-eye-open"></span></a> 
+				                        <a class="update" title="Update" href="@routes.CategoryController.edit(category.id)"><span class="glyphicon glyphicon-pencil"></span></a> 
+				                        <span title="Delete" class="glyphicon glyphicon-trash"></span>
+			                        </td>			                        
+			                    </tr>
+			                }
+					</tbody>
+				</table>
+				<p class="current text-right">
+	                Displaying @currentPage.getDisplayXtoYofZ(" to "," of ")
+	            </p>
+	            <ul class="pagination pull-right">
+	            	<li><a href="@link(0, null)">&laquo;</a></li>
+	            	@if(currentPage.hasPrev) {
+	                    <li class="prev">
+	                        <a href="@link(currentPage.getPageIndex - 1, null)">&larr; Previous</a>
+	                    </li>
+	                } else {
+	                    <li class="prev disabled">
+	                        <a>&larr; Previous</a>
+	                    </li>
+	                }
+	            	@for(i <- 0 until currentPage.getTotalPageCount) {
+	            		<li class="@("active".when(i == currentPage.getPageIndex))"><a href="@link(i, null)">@i</a></li>
+	            	}
+	            	@if(currentPage.hasNext) {
+	                    <li class="next">
+	                        <a href="@link(currentPage.getPageIndex + 1, null)">Next &rarr;</a>
+	                    </li>
+	                } else {
+	                    <li class="next disabled">
+	                        <a>Next &rarr;</a>
+	                    </li>
+	                }
+	            	<li><a href="@link(currentPage.getTotalPageCount - 1, null)">&raquo;</a></li>
+	            </ul>
+            </div>
+		}
+	</div>
+	<div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar"
+		role="navigation">
+		<ul class="nav">
+			<li class="active"><a
+				href="@routes.CategoryController.newCategory()">Add Category</a></li>
+		</ul>
 	</div>
 </div>
 }

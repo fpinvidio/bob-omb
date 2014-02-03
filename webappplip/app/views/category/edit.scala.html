@@ -1,4 +1,4 @@
-@(categoryForm: Form[Category])
+@(category: Category, categoryForm: Form[Category])
 
 @import helper._
 @import fields._
@@ -10,13 +10,14 @@
 			<ol class="breadcrumb">
 				<li><a href="/">Home</a></li>
 				<li><a href="@routes.CategoryController.index()">Categories</a></li>
-				<li class="active">Add</li>
+				<li><a href="@routes.CategoryController.index()">@category.name</a></li>
+				<li class="active">Edit</li>
 			</ol>
-			<h2>Add Category</h2>
+			<h2>Edit Category</h2>
 			<div class="well well-lg col-md-6">
-				@form(routes.CategoryController.createCategory(), 'class -> "form-horizontal") {
+				@form(routes.CategoryController.update(category.id), 'class -> "form-horizontal") {
 					@inputText(categoryForm("name"), '_label -> "Name", 'class -> "form-control")
-			        <button type="submit" class="btn btn-primary" value="Create">Create</button>
+			        <button type="submit" class="btn btn-primary" value="Save">Save</button>
 				}
 			</div> 
 		</div>
