@@ -1,0 +1,59 @@
+@(product: Product) 
+
+@main(product.name) {
+
+<div class="row row-offcanvas row-offcanvas-right">
+	<div class="col-xs-12 col-sm-9 ">
+		<ol class="breadcrumb">
+			<li><a href="@routes.ApplicationController.index()">Home</a></li>
+			<li class="active">@product.name</li>
+		</ol>
+		@if(flash.containsKey("success")) {
+			<div class="alert alert-success alert-dismissable">
+			  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			  <strong>Success!</strong> @flash.get("success")
+			</div>
+	    }
+		<div class="media">
+		  <a class="pull-left" href="#">
+		  	@if(product.image_number > 0) {
+                <img class="media-object" src="@product.images(0).path" alt="User">
+            } else {
+                <img class="media-object" src="http://placehold.it/150x100" alt="User">
+            }
+		  </a>
+		  <div class="media-body">
+		    <h2 class="media-heading">@product.name</h2>
+		    <dl>
+			  <dt>Weight</dt>
+			    <dd>@product.weight</dd>
+			  <dt>Description</dt>
+			    <dd>@product.description</dd>
+			  <dt>Code</dt>
+			    <dd>@product.code</dd>
+			  <dt>Laboratory</dt>
+			    <dd>@product.laboratory</dd>
+			  <dt>Category</dt>
+			    <dd>@product.category.name</dd>
+			  <dt>Status</dt>
+				  @if(product.enabled == false) {
+	                  <dd><span class="label label-danger">Inactive</span></dd>
+	              } else {
+	                  <dd><span class="label label-success">Active</span></dd>
+	              }
+			</dl>
+		  </div>
+		</div>
+		
+	</div>
+	<div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar"
+		role="navigation">
+		<ul class="nav">
+			<li class="active"><a
+				href="@routes.ProductController.newProduct()">Add Product</a></li>
+			<li class="active"><a
+				href="@routes.ProductController.edit(product.id)">Edit Product</a></li>
+		</ul>
+	</div>
+</div>
+}

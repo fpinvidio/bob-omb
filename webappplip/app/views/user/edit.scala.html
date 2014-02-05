@@ -1,4 +1,4 @@
-@(userform: Form[User], roles: List[Role])
+@(user: User, userform: Form[User], roles: List[Role])
 
 @import helper._
 @import fields._
@@ -10,11 +10,12 @@
 			<ol class="breadcrumb">
 				<li><a href="@routes.ApplicationController.index()">Home</a></li>
 				<li><a href="@routes.UserController.index()">Users</a></li>
-				<li class="active">Add</li>
+				<li><a href="@routes.UserController.show(user.id)">@user.name</a></li>
+				<li class="active">Edit</li>
 			</ol>
-			<h2>Add User</h2>
+			<h2>Edit User</h2>
 			<div class="well well-lg col-md-8">
-				@form(routes.UserController.createUser(), 'class -> "form-horizontal") {
+				@form(routes.UserController.update(user.id), 'class -> "form-horizontal") {
 					@inputText(userform("name"), '_label -> "Name", 'class -> "form-control")
 					@inputText(userform("last_name"), '_label -> "Lastname", 'class -> "form-control")
 					@inputText(userform("username"), '_label -> "Username", 'class -> "form-control")
@@ -23,7 +24,7 @@
 						r => r.id.toString -> r.name 
 					}, '_label -> "Role",
 			               '_showConstraints -> false, 'class -> "form-control")
-			        <button type="submit" class="btn btn-primary" value="Create">Create</button>
+			        <button type="submit" class="btn btn-primary" value="Save">Save</button>
 				}
 			</div> 
 		</div>

@@ -1,5 +1,7 @@
 package controllers;
 
+import static play.data.Form.form;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,6 +11,7 @@ import models.Category;
 import models.Image;
 import models.Position;
 import models.Product;
+import models.User;
 
 import org.apache.commons.io.FileExistsException;
 import org.apache.commons.io.FileUtils;
@@ -20,8 +23,10 @@ import play.mvc.Security;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
+import views.html.product.edit;
 import views.html.product.create;
 import views.html.product.index;
+import views.html.product.show;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,10 +50,36 @@ public class ProductController extends Controller {
             )
         );
 	}
+	
+	public static Result show(Long id) {
+		Product product = Product.find.byId(id);
+		return ok(show.render(product));
+	}
 
 	public static Result newProduct() {
 		return ok(create.render(productForm, categories));
 	}
+	
+	public static Result edit(Long id) {
+		Product product = Product.find.byId(id);
+        Form<Product> computerForm = form(Product.class).fill(
+        	product
+        );
+        return ok(
+            edit.render(product, computerForm, categories)
+        );
+    }
+	
+	public static Result update(Long id) {
+		Product product = Product.find.byId(id);
+        Form<Product> filledForm = form(Product.class).bindFromRequest();
+        if(filledForm.hasErrors()) {
+            return badRequest(edit.render(product, filledForm, categories));
+        }
+        filledForm.get().update(id);
+        flash("success", "Product " + filledForm.get().name + " has been updated");
+        return index();
+    }
 
 	public static Result createProduct() {
 		// DynamicForm requestData = Form.form().bindFromRequest();

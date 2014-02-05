@@ -237,6 +237,24 @@ code {
 	margin: 10px 0px;
 }
 
+@font-face {
+	font-family: "Amerika Sans";
+    src: url(./fonts/Amerika.ttf) format("truetype");
+}
+
+.brand-font {
+	font-family: "Amerika Sans", Verdana, Tahoma;
+	color: #333 !important;
+}
+
+.logo-image {
+	height: 80px;
+	z-index: 10;
+	position: absolute;
+	left: 60px;
+	top: 5px;
+}
+
 /* Colors styles
 -------------------------------------------------- */
 

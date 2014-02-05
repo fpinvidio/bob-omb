@@ -1,0 +1,46 @@
+@(product: Product, productform: Form[Product], categories: List[Category])
+
+@import helper._
+@import fields._
+@implicitField = @{ FieldConstructor(bootstrapfield.f) }
+
+@main("Edit Product") { 	
+	<div class="row row-offcanvas row-offcanvas-right">
+		<div class="col-xs-12 col-sm-9 ">
+			<ol class="breadcrumb">
+				<li><a href="@routes.ApplicationController.index()">Home</a></li>
+				<li><a href="@routes.ProductController.index()">Products</a></li>
+				<li><a>@product.name</a></li>
+				<li class="active">Edit</li>
+			</ol>
+			<h2>Edit Product</h2>
+			<div class="well well-lg col-md-8">
+				@form(routes.ProductController.update(product.id), 'class -> "form-horizontal") {
+					@inputText(productform("name"), '_label -> "Name", 'class -> "form-control")
+					@inputText(productform("weight"), '_label -> "Weight", 'class -> "form-control")
+					@inputText(productform("description"), '_label -> "Description", 'class -> "form-control")
+					@inputText(productform("code"), '_label -> "Code", 'class -> "form-control")
+					@inputText(productform("laboratory"), '_label -> "Laboratory", 'class -> "form-control")
+					@defining(productform("image_number")) { image_number =>
+					  <input type="hidden" name="@image_number.name" id="@image_number.id" value="@image_number.value">
+					}
+					@checkbox(field = productform("enabled"), '_label -> "Enabled")
+					@select(productform("category.id"), categories.map{
+						c => c.id.toString -> c.name 
+					}, '_label -> "Category",
+			               '_showConstraints -> false, 'class -> "form-control")
+			        <button type="submit" class="btn btn-primary" value="Save">Save</button>
+				}
+			</div> 
+		</div>
+		<div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar"
+			role="navigation">
+			<ul class="nav">
+				<li class="active"><a
+					href="@routes.ProductController.newProduct()">Add Product</a></li>
+				<li><a
+					href="@routes.ProductController.index()">View Products</a></li>
+			</ul>
+		</div>
+	</div>
+}

@@ -9,6 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.avaje.ebean.Page;
+
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 import exceptions.EmptyPasswordException;
@@ -57,5 +59,15 @@ public class User extends Model {
 	public boolean isAdmin() {
 		return "Admin".equals(role.name);
 	}
+	
+	public static Page<User> page(int page, int pageSize, String sortBy, String order, String filter) {
+		return 
+            find.where()
+                .ilike("name", "%" + filter + "%")
+                .orderBy(sortBy + " " + order)
+                .findPagingList(pageSize)
+                .setFetchAhead(false)
+                .getPage(page);
+    }
 
 }

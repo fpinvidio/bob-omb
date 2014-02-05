@@ -2,28 +2,35 @@ package controllers;
 
 import static play.data.Form.form;
 import models.Category;
+import models.Image;
+import models.Product;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 import views.html.category.create;
-import views.html.category.index;
 import views.html.category.edit;
+import views.html.image.index;
 import views.html.category.show;
 
 @Security.Authenticated(SecuredAuthenticator.class)
-public class CategoryController extends Controller {
+public class ImageController extends Controller {
 	static Form<Category> categoryForm = Form.form(Category.class);
 
 	public static Result index() {
-		return redirect(routes.CategoryController.index(0, "name", "asc", ""));
+		return redirect(routes.ImageController.index(0, "name", "asc", "", 1));
 	}
 	
-	public static Result index(int page, String sortBy, String order, String filter) {
+	public static Result product(Long product_id) {
+		return redirect(routes.ImageController.index(0, "name", "asc", "", product_id));
+	}
+	
+	public static Result index(int page, String sortBy, String order, String filter, Long product_id) {
+		Product product = Product.find.byId(product_id);
 		return ok(
             index.render(
-                Category.page(page, 5, sortBy, order, filter),
-                sortBy, order, filter
+                Image.page(page, 5, sortBy, order, filter, product),
+                sortBy, order, filter, product
             )
         );
 	}
@@ -69,4 +76,5 @@ public class CategoryController extends Controller {
 			return index();
 		}
 	}
+
 }

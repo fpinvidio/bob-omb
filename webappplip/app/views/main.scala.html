@@ -51,17 +51,17 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="@routes.ApplicationController.index()">PLiP</a>
+          <a class="navbar-brand brand-font" href="@routes.ApplicationController.index()">PLiP</a>
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
           	@if(session().get("username") != null) {
-          	  <li class=@{if (request.path == routes.MonitorController.index().toString()) "active" else ""}><a href="@routes.MonitorController.index()">Monitor</a></li>
-			  <li class=@{if (request.path == routes.ProductController.index().toString()) "active" else ""}><a href="@routes.ProductController.index()">Products</a></li>
-              <li class=@{if (request.path == routes.UserController.index().toString()) "active" else ""}><a href="@routes.UserController.index()">Users</a></li>
-              <li class=@{if (request.path == routes.CategoryController.index().toString()) "active" else ""}><a href="@routes.CategoryController.index()">Categories</a></li>
+          	  <li class=@{if (request.path contains "monitor") "active" else ""}><a href="@routes.MonitorController.index()">Monitor</a></li>
+			  <li class=@{if (request.path contains "product") "active" else ""}><a href="@routes.ProductController.index()">Products</a></li>
+			  <li class=@{if (request.path contains "category") "active" else ""}><a href="@routes.CategoryController.index()">Categories</a></li>
+              <li class=@{if (request.path contains "user") "active" else ""}><a href="@routes.UserController.index()">Users</a></li>
 			} else {
-			  <li class=@{if (request.path == routes.MonitorController.index().toString()) "active" else ""}><a href="@routes.MonitorController.index()">Monitor</a></li>
+			  <li class=@{if (request.path contains "monitor") "active" else ""}><a href="@routes.MonitorController.index()">Monitor</a></li>
 			}
           </ul>
           <ul class="nav navbar-nav navbar-right">

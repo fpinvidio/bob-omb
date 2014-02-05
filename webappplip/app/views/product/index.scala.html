@@ -79,6 +79,7 @@
 		                    @header("enabled", "Status")
 		                    @header("code", "Code")
 		                    @header("weight", "Weight")
+		                    <th>Actions</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -88,7 +89,7 @@
 			                        <td>@product.description</td>
 			                        <td>@product.laboratory</td>
 			                        <td class="text-center">
-			                            @if(product.enabled == 0) {
+			                            @if(product.enabled == false) {
 			                                <span class="label label-danger">Inactive</span>
 			                            } else {
 			                                <span class="label label-success">Active</span>
@@ -96,6 +97,11 @@
 			                        </td>
 			                        <td>@product.code</td>
 			                        <td>@product.weight</td>
+			                        <td style="width: 50px">
+			                        	<a class="manage-img" title="Images" href="@routes.ImageController.product(product.id)"><span title="Images" class="glyphicon glyphicon-picture"></span></a>
+				                        <a class="update" title="Update" href="@routes.ProductController.edit(product.id)"><span class="glyphicon glyphicon-pencil"></span></a> 
+				                        <span title="Delete" class="glyphicon glyphicon-trash"></span>
+			                        </td>
 			                    </tr>
 			                }
 					</tbody>

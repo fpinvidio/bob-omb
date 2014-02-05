@@ -10,6 +10,8 @@ import javax.persistence.Table;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
+import com.avaje.ebean.Page;
+
 @Entity
 @Table(name = "image")
 public class Image extends Model {
@@ -25,10 +27,29 @@ public class Image extends Model {
 	@ManyToOne
 	@JoinColumn(name="id_position", referencedColumnName="id_position")
 	public Position position;
+	@ManyToOne
+	@JoinColumn(name="id_product")
+	public Product product;
 	
 	public Image() {
 		super();
 		this.trained = false;
 	}
+	
+	public static Finder<Long, Image> find = new Finder<Long, Image>(Long.class,
+			Image.class);
+	
+	public static Page<Image> page(int page, int pageSize, String sortBy, String order, String filter, Product product) {
+		return 
+            find.where()
+            	.join("product")
+            	.where()
+            	.eq("t0.id_product", product.id)
+                .ilike("name", "%" + filter + "%")
+                .orderBy(sortBy + " " + order)
+                .findPagingList(pageSize)
+                .setFetchAhead(false)
+                .getPage(page);
+    }
 
 }

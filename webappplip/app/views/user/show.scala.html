@@ -1,0 +1,43 @@
+@(user: User) 
+
+@main(user.name) {
+
+<div class="row row-offcanvas row-offcanvas-right">
+	<div class="col-xs-12 col-sm-9 ">
+		<ol class="breadcrumb">
+			<li><a href="@routes.ApplicationController.index()">Home</a></li>
+			<li class="active">@user.name</li>
+		</ol>
+		@if(flash.containsKey("success")) {
+			<div class="alert alert-success alert-dismissable">
+			  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			  <strong>Success!</strong> @flash.get("success")
+			</div>
+	    }
+		<div class="media">
+		  <a class="pull-left" href="#">
+		    <img class="media-object" src="http://placehold.it/150x100" alt="User">
+		  </a>
+		  <div class="media-body">
+		    <h2 class="media-heading">@user.name @user.last_name</h2>
+		    <dl>
+			  <dt>Username</dt>
+			    <dd>@user.username</dd>
+			  <dt>Role</dt>
+			    <dd>@user.role.name</dd>
+			</dl>
+		  </div>
+		</div>
+		
+	</div>
+	<div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar"
+		role="navigation">
+		<ul class="nav">
+			<li class="active"><a
+				href="@routes.UserController.newUser()">Add User</a></li>
+			<li class="active"><a
+				href="@routes.UserController.edit(user.id)">Edit User</a></li>
+		</ul>
+	</div>
+</div>
+}

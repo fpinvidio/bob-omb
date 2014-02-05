@@ -16,9 +16,12 @@ POST	/monitor/receive				controllers.MonitorController.pageReceived()
 
 # User page
 
-GET /user								controllers.UserController.index()
+GET /user								controllers.UserController.index(p:Int ?= 0, s ?= "name", o ?= "asc", f ?= "")
 GET /user/create						controllers.UserController.newUser()
 POST /user/create						controllers.UserController.createUser()
+GET /user/:id              				controllers.UserController.show(id:Long)
+GET /user/:id/edit              		controllers.UserController.edit(id:Long)
+POST /user/:id/edit              		controllers.UserController.update(id:Long)
 
 # Category page
 
@@ -29,12 +32,24 @@ GET /category/:id              			controllers.CategoryController.show(id:Long)
 GET /category/:id/edit              	controllers.CategoryController.edit(id:Long)
 POST /category/:id/edit              	controllers.CategoryController.update(id:Long)
 
+# Image page
+
+GET /image/index						controllers.ImageController.index(p:Int ?= 0, s ?= "name", o ?= "asc", f ?= "", id:Long)
+GET /image/product						controllers.ImageController.product(id:Long)
+
 # Product page
 
 GET /product							controllers.ProductController.index(p:Int ?= 0, s ?= "name", o ?= "asc", f ?= "")
 GET /product/create						controllers.ProductController.newProduct()
 POST /product/create					controllers.ProductController.createProduct()
+GET /product/:id              			controllers.ProductController.show(id:Long)
 POST /product/uploadimages				controllers.ProductController.uploadImages()
+GET /product/:id/edit              		controllers.ProductController.edit(id:Long)
+POST /product/:id/edit              	controllers.ProductController.update(id:Long)
+
+# Test services
+
+GET /page/latest						controllers.PageController.getLatestPage()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               	controllers.Assets.at(path="/public", file)

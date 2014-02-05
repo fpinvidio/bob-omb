@@ -1,4 +1,4 @@
-@(currentPage: com.avaje.ebean.Page[User], currentSortBy: String, currentOrder: String, currentFilter: String) 
+@(currentPage: com.avaje.ebean.Page[Image], currentSortBy: String, currentOrder: String, currentFilter: String, product: Product) 
 
 @****************************************
 * Helper generating navigation links    *
@@ -22,7 +22,7 @@
     }
     
     // Generate the link
-    routes.UserController.index(newPage, sortBy, order, currentFilter)
+    routes.ImageController.index(newPage, sortBy, order, currentFilter, product.id)
     
 }
 
@@ -35,7 +35,7 @@
     </th>
 }
 
-@main("Users") {
+@main("Categories") {
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('[data-toggle=offcanvas]').click(function() {
@@ -46,8 +46,9 @@
 <div class="row row-offcanvas row-offcanvas-right">
 	<div class="col-xs-12 col-sm-9 ">
 		<ol class="breadcrumb">
-			<li><a href="@routes.ApplicationController.index()">Home</a></li>
-			<li class="active">Users</li>
+			<li><a href="/">Home</a></li>
+			<li><a href="@routes.ProductController.show(product.id)">Product</a></li>
+			<li class="active">Image</li>
 		</ol>
 		@if(flash.containsKey("success")) {
 			<div class="alert alert-success alert-dismissable">
@@ -55,19 +56,7 @@
 			  <strong>Success!</strong> @flash.get("success")
 			</div>
 	    }
-		<h1>Users</h1>
-		
-		<div id="actions" class="small-margin">
-	        <form action="@link(0, "name")" method="GET">
-	        	<div class="col-xs-3">
-		            <input type="search" id="searchbox" name="f" value="@currentFilter" class="form-control" placeholder="Filter by user name...">
-	            </div>
-	            <input type="submit" id="searchsubmit" value="Filter" class="btn btn-primary">
-	        </form>
-	        
-	        <!-- <a class="btn success" id="add" href="@routes.ProductController.newProduct()">Add a new product</a> -->
-	        
-	    </div>
+		<h1>Images</h1>
 	    
 	    @if(currentPage.getTotalRowCount == 0) {
         
@@ -81,22 +70,16 @@
 					<thead>
 						<tr>
 							@header("name", "Name")
-							@header("last_name", "Lastname")
-							@header("username", "Username")
-							@header("role.name", "Role")
 							<th>Actions</th>
 						</tr>
 					</thead>
 					<tbody>
-						@for(user <- currentPage.getList) {
+						@for(image <- currentPage.getList) {
 			                    <tr>
-			                        <td>@user.name</td>
-			                        <td>@user.last_name</td>
-			                        <td>@user.username</td>
-			                        <td>@user.role.name</td>
+			                        <td>@image.name</td>
 			                        <td style="width: 50px">
-				                        <a class="view" title="View" href="@routes.UserController.show(user.id)"><span class="glyphicon glyphicon-eye-open"></span></a> 
-				                        <a class="update" title="Update" href="@routes.UserController.edit(user.id)"><span class="glyphicon glyphicon-pencil"></span></a> 
+				                        <a class="view" title="View" href=""><span class="glyphicon glyphicon-eye-open"></span></a> 
+				                        <a class="update" title="Update" href=""><span class="glyphicon glyphicon-pencil"></span></a> 
 				                        <span title="Delete" class="glyphicon glyphicon-trash"></span>
 			                        </td>			                        
 			                    </tr>
@@ -138,7 +121,7 @@
 		role="navigation">
 		<ul class="nav">
 			<li class="active"><a
-				href="@routes.UserController.newUser()">Add User</a></li>
+				href="">Add Image</a></li>
 		</ul>
 	</div>
 </div>
