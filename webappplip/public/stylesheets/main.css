@@ -165,13 +165,13 @@ code {
 
 /* Dashboard styles
 -------------------------------------------------- */
-
 .dashboard-widget {
 	position: relative;
 	display: block;
 	color: #FFF
 }
-.dashboard-widget > .visual {
+
+.dashboard-widget>.visual {
 	width: 80px;
 	height: 80px;
 	display: block;
@@ -180,12 +180,14 @@ code {
 	padding-left: 15px;
 	margin-bottom: 10px;
 }
-.dashboard-widget > .details {
+
+.dashboard-widget>.details {
 	position: absolute;
 	right: 15px;
 	padding-right: 10px;
 }
-.details > .number {
+
+.details>.number {
 	padding-top: 15px;
 	text-align: right;
 	font-size: 34px;
@@ -195,7 +197,8 @@ code {
 	font-weight: 300;
 	color: #fff;
 }
-.details > .desc {
+
+.details>.desc {
 	text-align: right;
 	font-size: 16px;
 	letter-spacing: 0px;
@@ -203,12 +206,12 @@ code {
 	color: #fff;
 }
 
-.details > .desc-repo {
+.details>.desc-repo {
 	text-align: right;
 	font-size: 16px;
 	letter-spacing: 0px;
 	font-weight: 300;
-	padding-top:50px;
+	padding-top: 50px;
 	color: #fff;
 }
 
@@ -232,14 +235,13 @@ code {
 
 /* Element styles
 -------------------------------------------------- */
-
 .small-margin {
 	margin: 10px 0px;
 }
 
 @font-face {
 	font-family: "Amerika Sans";
-    src: url(./fonts/Amerika.ttf) format("truetype");
+	src: url(./fonts/Amerika.ttf) format("truetype");
 }
 
 .brand-font {
@@ -255,66 +257,93 @@ code {
 	top: 5px;
 }
 
+dt {
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+dd {
+	margin-left: 15px !important;
+}
+
 /* Colors styles
 -------------------------------------------------- */
-
 .turquoise {
 	background-color: #1abc9c
 }
+
 .emerald {
 	background-color: #2ecc71
 }
+
 .peter-river {
 	background-color: #3498db
 }
+
 .amethyst {
 	background-color: #9b59b6
 }
+
 .wet-asphalt {
 	background-color: #34495e
 }
+
 .green-sea {
 	background-color: #16a085
 }
+
 .nephertitis {
 	background-color: #27ae60
 }
+
 .belize-hole {
 	background-color: #2980b9
 }
+
 .wisteria {
 	background-color: #8e44ad
 }
+
 .midnight-blue {
 	background-color: #2c3e50
 }
+
 .sunflower {
 	background-color: #f1c40f
 }
+
 .carrot {
 	background-color: #e67e22
 }
+
 .alizarin {
 	background-color: #e74c3c
 }
+
 .clouds {
 	background-color: #ecf0f1
 }
+
 .concrete {
 	background-color: #95a5a6
 }
+
 .orange {
 	background-color: #f39c12
 }
+
 .pumpkin {
 	background-color: #d35400
 }
+
 .pomegranate {
 	background-color: #c0392b
 }
+
 .silver {
 	background-color: #bdc3c7
 }
+
 .abestos {
 	background-color: #7f8c8d
 }

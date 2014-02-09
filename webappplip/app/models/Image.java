@@ -12,6 +12,8 @@ import play.db.ebean.Model;
 
 import com.avaje.ebean.Page;
 
+import controllers.routes;
+
 @Entity
 @Table(name = "image")
 public class Image extends Model {
@@ -34,6 +36,12 @@ public class Image extends Model {
 	public Image() {
 		super();
 		this.trained = false;
+	}
+	
+	public String getSitePath() {
+		int start_index = path.indexOf("/uploads/");
+		String uploads_path = path.substring(start_index);
+		return routes.Assets.at(uploads_path).url();
 	}
 	
 	public static Finder<Long, Image> find = new Finder<Long, Image>(Long.class,

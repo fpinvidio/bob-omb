@@ -6,6 +6,7 @@
 	<div class="col-xs-12 col-sm-9 ">
 		<ol class="breadcrumb">
 			<li><a href="@routes.ApplicationController.index()">Home</a></li>
+			<li><a href="@routes.ProductController.index()">Products</a></li>
 			<li class="active">@product.name</li>
 		</ol>
 		@if(flash.containsKey("success")) {
@@ -17,14 +18,14 @@
 		<div class="media">
 		  <a class="pull-left" href="#">
 		  	@if(product.image_number > 0) {
-                <img class="media-object" src="@product.images(0).path" alt="User">
+                <img class="media-object" src="@product.images(0).getSitePath()"  width="150px" alt="User">
             } else {
                 <img class="media-object" src="http://placehold.it/150x100" alt="User">
             }
 		  </a>
 		  <div class="media-body">
 		    <h2 class="media-heading">@product.name</h2>
-		    <dl>
+		    <dl class="well well-large">
 			  <dt>Weight</dt>
 			    <dd>@product.weight</dd>
 			  <dt>Description</dt>
@@ -53,6 +54,8 @@
 				href="@routes.ProductController.newProduct()">Add Product</a></li>
 			<li class="active"><a
 				href="@routes.ProductController.edit(product.id)">Edit Product</a></li>
+			<li class="active"><a
+				href="@routes.ImageController.product(product.id)">View Images</a></li>
 		</ul>
 	</div>
 </div>

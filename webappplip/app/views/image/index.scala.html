@@ -35,7 +35,7 @@
     </th>
 }
 
-@main("Categories") {
+@main("Images") {
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('[data-toggle=offcanvas]').click(function() {
@@ -46,9 +46,10 @@
 <div class="row row-offcanvas row-offcanvas-right">
 	<div class="col-xs-12 col-sm-9 ">
 		<ol class="breadcrumb">
-			<li><a href="/">Home</a></li>
-			<li><a href="@routes.ProductController.show(product.id)">Product</a></li>
-			<li class="active">Image</li>
+			<li><a href="@routes.ApplicationController.index()">Home</a></li>
+			<li><a href="@routes.ProductController.index()">Products</a></li>
+			<li><a href="@routes.ProductController.show(product.id)">@product.name</a></li>
+			<li class="active">Images</li>
 		</ol>
 		@if(flash.containsKey("success")) {
 			<div class="alert alert-success alert-dismissable">
@@ -69,18 +70,22 @@
 				<table class="table table-hover table-bordered table-striped">
 					<thead>
 						<tr>
+							<th>Image</th>
 							@header("name", "Name")
+							@header("position.angle", "Angle")
 							<th>Actions</th>
 						</tr>
 					</thead>
 					<tbody>
 						@for(image <- currentPage.getList) {
 			                    <tr>
+			                    	<td style="width: 50px"><img src="@image.getSitePath()" alt="" width="40px"></td>
 			                        <td>@image.name</td>
+			                        <td>@image.position.angle</td>
 			                        <td style="width: 50px">
-				                        <a class="view" title="View" href=""><span class="glyphicon glyphicon-eye-open"></span></a> 
-				                        <a class="update" title="Update" href=""><span class="glyphicon glyphicon-pencil"></span></a> 
-				                        <span title="Delete" class="glyphicon glyphicon-trash"></span>
+			                        	<a class="view" title="View" href="@routes.ImageController.show(image.id, product.id)"><span class="glyphicon glyphicon-eye-open"></span></a> 
+				                        <a class="update" title="Update" href="@routes.ImageController.edit(image.id, product.id)"><span class="glyphicon glyphicon-pencil"></span></a> 
+				                        <a class="delete" title="Delete" href="@routes.ImageController.delete(image.id, product.id)"><span class="glyphicon glyphicon-trash"></span></a>
 			                        </td>			                        
 			                    </tr>
 			                }
@@ -121,7 +126,7 @@
 		role="navigation">
 		<ul class="nav">
 			<li class="active"><a
-				href="">Add Image</a></li>
+				href="@routes.ImageController.newImage(product.id)">Add Image</a></li>
 		</ul>
 	</div>
 </div>

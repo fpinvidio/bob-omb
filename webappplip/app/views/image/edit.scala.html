@@ -1,22 +1,33 @@
-@(category: Category, categoryForm: Form[Category])
+@(product: Product, image: Image, imageForm: Form[Image], positions: List[Position])
 
 @import helper._
 @import fields._
 @implicitField = @{ FieldConstructor(bootstrapfield.f) }
 
-@main("Add Category") { 	
+@main("Edit Image") { 	
 	<div class="row row-offcanvas row-offcanvas-right">
 		<div class="col-xs-12 col-sm-9 ">
 			<ol class="breadcrumb">
-				<li><a href="/">Home</a></li>
-				<li><a href="@routes.CategoryController.index()">Categories</a></li>
-				<li><a href="@routes.CategoryController.index()">@category.name</a></li>
+				<li><a href="@routes.ApplicationController.index()">Home</a></li>
+				<li><a href="@routes.ProductController.index()">Products</a></li>
+				<li><a href="@routes.ProductController.show(product.id)">@product.name</a></li>
+				<li><a href="@routes.ImageController.show(image.id, product.id)">@image.name</a></li>
 				<li class="active">Edit</li>
 			</ol>
-			<h2>Edit Category</h2>
+			<h2>Edit Image</h2>
 			<div class="well well-lg col-md-6">
-				@form(routes.CategoryController.update(category.id), 'class -> "form-horizontal") {
-					@inputText(categoryForm("name"), '_label -> "Name", 'class -> "form-control")
+				@form(routes.ImageController.update(image.id, product.id), 'class -> "form-horizontal") {
+					@inputText(imageForm("name"), '_label -> "Name", 'class -> "form-control")
+					@defining(imageForm("path")) { path =>
+					  <input type="hidden" name="path" id="path.id" value="@image.path">
+					}
+					@defining(imageForm("trained")) { trained =>
+					  <input type="hidden" name="@trained.name" id="@trained.id" value="false">
+					}
+					@select(imageForm("position.id"), positions.map{
+						r => r.id.toString -> (r.face.toString + " - " + r.angle.toString) 
+					}, '_label -> "Face / Angle",
+			               '_showConstraints -> false, 'class -> "form-control")
 			        <button type="submit" class="btn btn-primary" value="Save">Save</button>
 				}
 			</div> 
@@ -25,9 +36,11 @@
 			role="navigation">
 			<ul class="nav">
 				<li class="active"><a
-					href="@routes.CategoryController.newCategory()">Add Category</a></li>
+					href="@routes.ImageController.newImage(product.id)">Add Image</a></li>
 				<li><a
-					href="@routes.CategoryController.index()">View Categories</a></li>
+					href="@routes.ImageController.product(product.id)">View Images</a></li>
+				<li class="active"><a
+				href="@routes.ImageController.delete(image.id, product.id)">Delete Image</a></li>
 			</ul>
 		</div>
 	</div>

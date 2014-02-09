@@ -1,22 +1,65 @@
-@(categoryForm: Form[Category])
+@(imageForm: Form[Image], product: Product, positions: List[Position])
 
 @import helper._
 @import fields._
 @implicitField = @{ FieldConstructor(bootstrapfield.f) }
 
-@main("Add Category") { 	
+@main("Add Images") { 	
 	<div class="row row-offcanvas row-offcanvas-right">
 		<div class="col-xs-12 col-sm-9 ">
 			<ol class="breadcrumb">
-				<li><a href="/">Home</a></li>
-				<li><a href="@routes.CategoryController.index()">Categories</a></li>
+				<li><a href="@routes.ApplicationController.index()">Home</a></li>
+				<li><a href="@routes.ProductController.index()">Products</a></li>
+				<li><a href="@routes.ProductController.show(product.id)">@product.name</a></li>
 				<li class="active">Add</li>
 			</ol>
-			<h2>Add Category</h2>
+			@if(flash.containsKey("error")) {
+				<div class="alert alert-danger alert-dismissable">
+				  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				  <strong>Error!</strong> @flash.get("error")
+				</div>
+		    }
+			<h2>Add Images</h2>
 			<div class="well well-lg col-md-6">
-				@form(routes.CategoryController.createCategory(), 'class -> "form-horizontal") {
-					@inputText(categoryForm("name"), '_label -> "Name", 'class -> "form-control")
-			        <button type="submit" class="btn btn-primary" value="Create">Create</button>
+				@form(action = routes.ImageController.createImage(product.id), 'enctype -> "multipart/form-data",  'class -> "form-horizontal") {
+				    @inputText(imageForm("name"), '_label -> "Name", 'class -> "form-control")
+				    @defining(imageForm("trained")) { trained =>
+					  <input type="hidden" name="@trained.name" id="@trained.id" value="false">
+					}
+					<div class="form-group ">
+					    <label for="position_id" class="col-sm-2 control-label">Angle</label>
+					    <div class="input col-md-10">
+					        <select id="angle" name="angle" class="form-control">
+					                <option value="0" selected="selected">0º</option>
+					                <option value="90">90º</option>
+					                <option value="180">180º</option>
+					                <option value="270">270º</option>
+					        </select>
+					    </div>
+					</div>
+					<div class="form-group">
+					  <div class="col-sm-offset-2 col-sm-10">
+					    <div class="checkbox">
+					      <label>
+					        <input type="checkbox" name="face"> Front
+					      </label>
+					    </div>
+					  </div>
+					</div>
+					<div class="form-group ">
+					    <label for="name" class="col-sm-2 control-label">Image</label>
+					    <div class="input col-md-10">
+					        
+					    <input type="file" name="picture">
+					
+					        <span class="help-block"></span>
+					        <!-- <span class="errors"></span>
+					        <span class="help"></span> -->
+					    </div>
+					</div>
+				    <p>
+				        <button type="submit" class="btn btn-primary" value="Save">Save</button>
+				    </p>
 				}
 			</div> 
 		</div>
@@ -24,9 +67,9 @@
 			role="navigation">
 			<ul class="nav">
 				<li class="active"><a
-					href="@routes.CategoryController.newCategory()">Add Category</a></li>
+					href="@routes.ImageController.newImage(product.id)">Add Image</a></li>
 				<li><a
-					href="@routes.CategoryController.index()">View Categories</a></li>
+					href="@routes.ImageController.product(product.id)">View Images</a></li>
 			</ul>
 		</div>
 	</div>

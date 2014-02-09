@@ -99,8 +99,8 @@
 			                        <td>@product.weight</td>
 			                        <td style="width: 50px">
 			                        	<a class="manage-img" title="Images" href="@routes.ImageController.product(product.id)"><span title="Images" class="glyphicon glyphicon-picture"></span></a>
+				                        <a class="view" title="View" href="@routes.ProductController.show(product.id)"><span class="glyphicon glyphicon-eye-open"></span></a>
 				                        <a class="update" title="Update" href="@routes.ProductController.edit(product.id)"><span class="glyphicon glyphicon-pencil"></span></a> 
-				                        <span title="Delete" class="glyphicon glyphicon-trash"></span>
 			                        </td>
 			                    </tr>
 			                }
