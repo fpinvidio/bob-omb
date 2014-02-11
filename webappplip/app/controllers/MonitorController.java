@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import models.Page;
+import models.TrayStatus;
 import models.WebSocketChannel;
 import models.messages.InboundPage;
+import models.messages.InboundStatus;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -55,10 +57,26 @@ public class MonitorController extends Controller {
 		}
 		return badRequest("Missing parameter [page_id]");
 	}
+	
+	public static Result statusReceived() {
+		String[] params = request().body().asFormUrlEncoded().get("status_id");
+		if (params != null && params.length > 0) {
+			String status_id = params[0];
+			if (status_id == null) {
+				return badRequest("Missing parameter [page_id]");
+			} else {
+				Long id = Long.parseLong(status_id);
+				TrayStatus status = TrayStatus.find.byId(id);
+				Monitor.instance.tell(new InboundStatus(status), null);
+				return ok("Received Page");
+			}
+		}
+		return badRequest("Missing parameter [status_id]");
+	}
 
 	public static Result execRequest() {
 
-		String url = "http://127.0.0.1:9000/monitor/receive";
+		String url = "http://127.0.0.1:9000/monitor/page";
 		HttpClient httpClient = new DefaultHttpClient();
 
 		try {

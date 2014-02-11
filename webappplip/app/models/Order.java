@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
+import com.avaje.ebean.Page;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -30,8 +31,18 @@ public class Order extends Model {
 	public String client;
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="order")
-	public List<Page> pages;
+	public List<models.Page> pages;
 	
 	public static Finder<Long, Order> find = new Finder<Long, Order>(Long.class,
 			Order.class);
+	
+	public static Page<Order> page(int page, int pageSize, String sortBy, String order, String filter) {
+		return 
+            find.where()
+                .ilike("client", "%" + filter + "%")
+                .orderBy(sortBy + " " + order)
+                .findPagingList(pageSize)
+                .setFetchAhead(false)
+                .getPage(page);
+    }
 }

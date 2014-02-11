@@ -16,6 +16,7 @@ import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 import play.libs.Json;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.JsonNode;
 
 @Entity
@@ -32,6 +33,10 @@ public class Page extends Model {
 	@OneToOne
 	@JoinColumn(name = "id_page_image")
 	public PageImage page_image;
+	@JsonIgnore
+	@OneToOne
+	@JoinColumn(name = "id_page")
+	public Tray tray;
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_page", referencedColumnName = "id_page")
 	public List<PageProduct> page_products;

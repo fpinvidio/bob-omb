@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import controllers.routes;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
@@ -26,5 +27,14 @@ public class PageImage extends Model{
 
 	public static Finder<Long, PageImage> find = new Finder<Long, PageImage>(Long.class,
 			PageImage.class);
+	
+	public String getSitePath() {
+		if (path != null) {
+			int start_index = path.indexOf("/uploads/");
+			String uploads_path = path.substring(start_index);
+			return routes.Assets.at(uploads_path).url();
+		}
+		return "";
+	}
 
 }

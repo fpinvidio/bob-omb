@@ -5,6 +5,7 @@ import java.util.List;
 
 import models.WebSocketChannel;
 import models.messages.InboundPage;
+import models.messages.InboundStatus;
 import play.libs.Akka;
 import play.libs.F.Callback;
 import play.libs.F.Callback0;
@@ -26,6 +27,8 @@ public class Monitor extends UntypedActor {
 	public void onReceive(Object message) {
 		if (message instanceof InboundPage) {
 			notifyAll(((InboundPage) message).getPageJSON());
+		} else if (message instanceof InboundStatus) {
+			notifyAll(((InboundStatus) message).getStatusJSON());
 		} else {
 			unhandled(message);
 		}

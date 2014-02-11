@@ -72,6 +72,7 @@
 						<tr>
 							<th>Image</th>
 							@header("name", "Name")
+							@header("position.face", "Face")
 							@header("position.angle", "Angle")
 							<th>Actions</th>
 						</tr>
@@ -81,6 +82,7 @@
 			                    <tr>
 			                    	<td style="width: 50px"><img src="@image.getSitePath()" alt="" width="40px"></td>
 			                        <td>@image.name</td>
+			                        <td>@image.position.face</td>
 			                        <td>@image.position.angle</td>
 			                        <td style="width: 50px">
 			                        	<a class="view" title="View" href="@routes.ImageController.show(image.id, product.id)"><span class="glyphicon glyphicon-eye-open"></span></a> 

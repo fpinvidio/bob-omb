@@ -13,6 +13,8 @@
 		<link rel="stylesheet" href="@routes.Assets.at("plugins/fileupload/css/jquery.fileupload.css")" />
 		<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/sidebar.css")">
 		<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/font-awesome/css/font-awesome.min.css")">
+		<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/lightbox/lightbox.css")">
+		<link rel="stylesheet" media="screen" href="@routes.Assets.at("plugins/amcharts/samples/style.css")">
         <script src="@routes.Assets.at("javascripts/jquery-1.9.0.min.js")" type="text/javascript"></script>
         <script src="@routes.Assets.at("javascripts/slimscroll/jquery.slimscroll.min.js")" type="text/javascript"></script>
         <script src="@routes.Assets.at("javascripts/timeago/jquery.timeago.js")" type="text/javascript"></script>
@@ -25,11 +27,16 @@
 		<script src="@routes.Assets.at("plugins/fileupload/js/jquery.fileupload-process.js")" type="text/javascript"></script>
 		<script src="@routes.Assets.at("plugins/fileupload/js/jquery.fileupload-image.js")" type="text/javascript"></script>
 		<script src="@routes.Assets.at("plugins/fileupload/js/jquery.fileupload-validate.js")" type="text/javascript"></script>
+		<script src="@routes.Assets.at("javascripts/lightbox/lightbox-2.6.min.js")" type="text/javascript"></script>
+		<script src="@routes.Assets.at("plugins/amcharts/amcharts/amcharts.js")" type="text/javascript"></script>
+		<script src="@routes.Assets.at("plugins/amcharts/amcharts/pie.js")" type="text/javascript"></script>
+		<script src="@routes.Assets.at("plugins/amcharts/amcharts/serial.js")" type="text/javascript"></script>
+		<script src="@routes.Assets.at("javascripts/moment/moment.min.js")" type="text/javascript"></script>
     </head>
     <body>
     <div id="wrap">
     	@navbar
-	    <div class="container" style="padding-top: 60px; padding-bottom: 20px;">
+	    <div class="container" style="padding-bottom: 20px;">
 	    	@content
 	    </div>
     </div>
@@ -57,6 +64,7 @@
           <ul class="nav navbar-nav">
           	@if(session().get("username") != null) {
           	  <li class=@{if (request.path contains "monitor") "active" else ""}><a href="@routes.MonitorController.index()">Monitor</a></li>
+          	  <li class=@{if (request.path contains "order") "active" else ""}><a href="@routes.OrderController.index()">Orders</a></li>
 			  <li class=@{if (request.path contains "product") "active" else ""}><a href="@routes.ProductController.index()">Products</a></li>
 			  <li class=@{if (request.path contains "category") "active" else ""}><a href="@routes.CategoryController.index()">Categories</a></li>
               <li class=@{if (request.path contains "user") "active" else ""}><a href="@routes.UserController.index()">Users</a></li>

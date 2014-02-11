@@ -1,19 +1,122 @@
-@(message: String) @main("Administration Panel") {
-<div class="row">
-<div class="page-header">
-		<h1>Welcome to PLiP</h1>
-		<p>Administration Panel</p>
-	</div>
+@(message: String, invalid_trays: List[Tray], valid_trays: Integer, orders: String, trays: Integer, orders_size: Integer, today_trays: Integer) @main("Administration Panel") {
+<script type="text/javascript">
+    var chart;
+    var legend;
+
+    var chartData = [{
+        tray: "Invalid",
+        total: @invalid_trays.length
+    }, {
+        tray: "Valid",
+        total: @valid_trays
+    }];
+    
+    var values = JSON.parse('@Html(orders)'); 
+    function parseDate(input) {
+  		var parts = input.match(/(\d+)/g);
+  		return new Date(parts[0], parts[1]-1, parts[2]);
+	}
+	var now = new Date();
+	var min_date = new Date();
+	min_date.setDate(now.getDate() - 30);
+	var chartData2 = [];
+	for (var i = 0; i < 500; i++) {
+		var tempArrayValue = {};
+		var temp_date = new Date();
+		temp_date.setDate(now.getDate() - i);
+		var count = 0;
+		for (var key in values) {
+			var value_date = parseDate(values[key].date).getDate();
+			var value_month = parseDate(values[key].date).getMonth();
+			var value_year = parseDate(values[key].date).getYear();
+			if ( value_date == temp_date.getDate() && value_month == temp_date.getMonth() && value_year == temp_date.getYear()) {
+				count += values[key].count;
+			}
+		}
+		chartData2.push({
+			"date": temp_date,
+			"count": count,
+			"line-color": "#3498db"
+		});	
+	}
+	chartData2 = chartData2.reverse();
+    var charter;
+    var chartCursor;
+
+    AmCharts.ready(function () {
+    	chart = new AmCharts.AmPieChart();
+        chart.baseColor = "#e74c3c";
+        chart.dataProvider = chartData;
+        chart.titleField = "tray";
+        chart.valueField = "total";
+        chart.outlineColor = "#FFFFFF";
+        chart.outlineAlpha = 0.8;
+        chart.outlineThickness = 2;
+        chart.write("chartdiv");
+        
+    	charter = new AmCharts.AmSerialChart();
+    	charter.dataProvider = chartData2;
+    	charter.categoryField = "date";
+    	charter.dataDateFormat = "YYYY-MM-DD";
+    	charter.balloon.bulletSize = 5;
+    	charter.addListener("dataUpdated", zoomChart);
+    	
+    	var categoryAxis = charter.categoryAxis;
+        categoryAxis.parseDates = true; // as our data is date-based, we set parseDates to true
+        categoryAxis.minPeriod = "DD"; // our data is daily, so we set minPeriod to DD
+        categoryAxis.dashLength = 1;
+        categoryAxis.minorGridEnabled = true;
+        categoryAxis.position = "top";
+        categoryAxis.axisColor = "#DADADA";
+
+        var durationAxis = new AmCharts.ValueAxis();
+        durationAxis.gridAlpha = 0.05;
+        durationAxis.axisAlpha = 0;
+        durationAxis.dashLength = 1;
+        charter.addValueAxis(durationAxis);
+
+		var graph = new AmCharts.AmGraph();
+        graph.title = "count";
+        graph.valueField = "count";
+        graph.bullet = "square";
+        graph.balloonText = "[[value]] Error/s Detected";
+        graph.balloonColor = "#e74c3c";
+        graph.bulletBorderColor = "#2980b9";
+        graph.lineColorField = "line-color";
+        graph.fillColorsField = "line-color";
+        graph.fillAlphas = 0.3;
+        graph.bulletBorderThickness = 2;
+        graph.bulletBorderAlpha = 1;
+        graph.lineThickness = 2;
+        graph.hideBulletsCount = 50; // this makes the chart to hide bullets when there are more than 50 series in selection
+        charter.addGraph(graph);
+        
+        chartCursor = new AmCharts.ChartCursor();
+        chartCursor.cursorPosition = "mouse";
+        chartCursor.pan = true; // set it to fals if you want the cursor to work in "select" mode
+        charter.addChartCursor(chartCursor);
+        
+        charter.write("chartdiv2");
+        function zoomChart() {
+            // different zoom methods can be used - zoomToIndexes, zoomToDates, zoomToCategoryValues
+            charter.zoomToIndexes(chartData2.length - 30, chartData2.length);
+        }
+    });
+</script>
+<div class="row" style="margin-top: -20px;">
+	<h1>Welcome to PLiP</h1>
+</div>
+<div class="row" style="margin-top: 30px;">
 	<div class="col-md-3">
 		<div class="dashboard-widget turquoise">
 			<div class="visual">
 				<i class="fa fa-bar-chart-o fa-5x"></i>
 			</div>
 			<div class="details">
-				<div class="number">2</div>
-				<div class="desc">Pedidos del mes</div>
+				<div class="number">@orders_size</div>
+				<div class="desc">Monthly orders</div>
 			</div>
-			<a class="more green-sea">Ver Más <i
+			<a class="more green-sea">View More <i
 				class="fa fa-angle-right fa-2x more-icon"></i>
 			</a>
 		</div>
@@ -25,10 +128,10 @@
 				<i class="fa fa-bookmark-o fa-5x"></i>
 			</div>
 			<div class="details">
-				<div class="number">3</div>
-				<div class="desc">Pedidos pendientes</div>
+				<div class="number">@trays</div>
+				<div class="desc">Total trays</div>
 			</div>
-			<a class="more orange">Ver Más <i
+			<a class="more orange">View More <i
 				class="fa fa-angle-right fa-2x more-icon"></i>
 			</a>
 		</div>
@@ -39,10 +142,10 @@
 				<i class="fa fa-calendar fa-5x"></i>
 			</div>
 			<div class="details">
-				<div class="number">4</div>
-				<div class="desc">Órdenes del día</div>
+				<div class="number">@today_trays</div>
+				<div class="desc">Today trays</div>
 			</div>
-			<a class="more belize-hole">Ver Más <i
+			<a class="more belize-hole">View More <i
 				class="fa fa-angle-right fa-2x more-icon"></i>
 			</a>
 		</div>
@@ -53,13 +156,25 @@
 				<i class="fa fa-warning fa-5x"></i>
 			</div>
 			<div class="details">
-				<div class="number">5</div>
-				<div class="desc">Items sin stock</div>
+				<div class="number">@invalid_trays.length</div>
+				<div class="desc">Detected errors</div>
 			</div>
-			<a class="more pomegranate">Ver Más <i
+			<a class="more pomegranate">View More <i
 				class="fa fa-angle-right fa-2x more-icon"></i>
 			</a>
 		</div>
+	</div>
+</div>
+<div class="col-md-12">
+	<hr>
+	<h2>Statistics</h2>
+	<div class="col-md-6">
+		<h4>Valid/Invalid Trays</h4>
+		<div id="chartdiv" style="width: 100%; height: 400px;"></div>
+	</div>
+	<div class="col-md-6">
+		<h4>Daily Status</h4>
+		<div id="chartdiv2" style="width: 100%; height: 300px;"></div>
 	</div>
 </div>
 }

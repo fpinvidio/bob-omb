@@ -6,48 +6,52 @@
 		});
 	});
 </script>
-<div class="row">
-	<div class="page-header">
+<div class="row row-offcanvas row-offcanvas-right">
+	<div class="col-xs-12 col-sm-9 ">
 		<ol class="breadcrumb">
 			<li><a href="/">Home</a></li>
 			<li class="active">Monitor</li>
 		</ol>
 		<h1>Monitor</h1>
+		<div class="col-md-8">
+			<div class="progress active progress-striped" id="order-progress">
+			</div>
+			<div class="media">
+				<a class="pull-left" href="#"> <img id="page_image"
+					class="media-object" src="http://placehold.it/150x100" width="150px">
+				</a>
+				<div class="media-body">
+					<h4 class="media-heading">Information</h4>
+					<dl>
+						<dt>Client</dt>
+						<dd id="client_label">Not available</dd>
+						<dt>Date</dt>
+						<dd id="date_label">Not available</dd>
+					</dl>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-12" style="margin: 20px;">
+			<div class="col-md-6">
+				<div>
+					<h4>Products</h4>
+					<ul id="products_list">
+						<i>No data available.</i>
+					</ul>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div>
+					<h4>Status</h4>
+					<ul id="status_list">
+						<i id="first_line_status">No data available.</i>
+					</ul>
+				</div>
+			</div>
+		</div>
 	</div>
-	<div class="col-md-8">
-		<div class="progress active progress-striped">
-			<div class="progress-bar progress-bar-success" style="width: 35%">
-				<span class="sr-only">35% Complete (success)</span>
-			</div>
-			<div class="progress-bar progress-bar-warning" style="width: 20%">
-				<span class="sr-only">20% Complete (warning)</span>
-			</div>
-			<div class="progress-bar progress-bar-danger" style="width: 10%">
-				<span class="sr-only">10% Complete (danger)</span>
-			</div>
-		</div>
-		<div class="media">
-			<a class="pull-left" href="#"> <img id="page_image"
-				class="media-object" src="http://placehold.it/150x100">
-			</a>
-			<div class="media-body">
-				<h4 class="media-heading">Information</h4>
-				<dl>
-					<dt>Client</dt>
-					<dd id="client_label">Not available</dd>
-					<dt>Date</dt>
-					<dd id="date_label">Not available</dd>
-				</dl>
-			</div>
-		</div>
-		<div>
-			<h4>Products</h4>
-			<ul id="products_list">
-				<i>No data available.</i>
-			</ul>
-		</div>
-	</div>
-	<div class="col-md-4">
+	<div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar"
+		role="navigation">
 		<div class="portlet box blue">
 			<div class="portlet-title">
 				<div class="caption">Recent Activity</div>
@@ -64,19 +68,45 @@
 </div>
 <div class="row">
 	<script type="text/javascript" charset="utf-8">
-		function buildFeed(page) {
+		var lastOrderId = null;
+		function buildPageFeed(page) {
 			var resultHTML = '<li><div class="col-md-8"><span class="glyphicon glyphicon-bullhorn"></span> '
-					+ 'Order Arrived - '
+					+ 'Tray Arrived - <a href="/order/' + page.order.id + '/tray">'
 					+ page.order.code
-					+ '</div><div class="col-md-4 abbr_time"><i><abbr class="timeago" title="'
+					+ '</a></div><div class="col-md-4 abbr_time"><i><abbr class="timeago" title="'
 					+ new Date().toISOString() + '"></abbr></i></div></li>';
 			return resultHTML;
+		}
+		function buildStatusFeed(status, id) {
+			var resultHTML = '<li><div class="col-md-8"><span class="glyphicon glyphicon-bullhorn"></span> '
+					+ '<a href="/order/' + id + '/tray">'
+					+ status.description
+					+ '</a></div><div class="col-md-3 abbr_time"><i><abbr class="timeago" title="'
+					+ new Date().toISOString() + '"></abbr></i></div></li>';
+			return resultHTML;
+		}
+		function addPercentageToBar(percentage, type) {
+			var result = ''
+			switch (type) {
+				case "success":
+					result = '<div class="progress-bar progress-bar-' + type + '" style="width: ' + percentage + '%"></div>';
+					break;
+				case "warning":
+					result = '<div class="progress-bar progress-bar-' + type + '" style="width: ' + percentage + '%"></div>';
+					break;
+				case "danger":
+					result = '<div class="progress-bar progress-bar-' + type + '" style="width: ' + percentage + '%"></div>';
+					break;
+				default:
+					result = '<div class="progress-bar progress-bar-success" style="width: ' + percentage + '%"></div>';
+			}
+			$("#order-progress").append(result)
 		}
 		function setOrderFields(page) {
 			$("#client_label").html(page.order.client);
 			$("#date_label").html(new Date(page.order.insert_date).toString());
 			if (page.page_image != null)
-				$("#page_image").attr("src", page.page_image);
+				$("#page_image").attr("src", page.page_image.sitePath);
 			var products_array = page.page_products;
 			$("#products_list").html("");
 			products_array.forEach(function(entry) {
@@ -84,6 +114,10 @@
 						"<li>" + entry.quantity + "x " + entry.product.name
 								+ "</li>");
 			});
+		}
+		function setStatusFields(status) {
+			$("#status_list").append("<li>" + status.status.description
+					+ " - " + new Date(status.date).toString() + "</li>");
 		}
 		$(function() {
 			var WS = window['MozWebSocket'] ? MozWebSocket : WebSocket
@@ -95,12 +129,20 @@
 				var result = JSON.parse(JSON.parse(event.data).text);
 				switch (result.type) {
 				case "page":
-					$("#live_feed").append(buildFeed(result.object));
+					$("#live_feed").append(buildPageFeed(result.object));
+					lastOrderId = result.object.order.id;
 					jQuery("abbr.timeago").timeago();
 					jQuery.timeago(new Date());
 					setOrderFields(result.object);
+					addPercentageToBar(20, "success")
 					break;
 				case "status":
+					$("#first_line_status").hide();
+					$("#live_feed").append(buildStatusFeed(result.object.status, lastOrderId));
+					setStatusFields(result.object);
+					jQuery("abbr.timeago").timeago();
+					jQuery.timeago(new Date());
+					addPercentageToBar(30, result.object.statusType);
 					break;
 				}
 			}

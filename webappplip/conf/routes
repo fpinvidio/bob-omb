@@ -12,7 +12,8 @@ POST    /login                      	controllers.ApplicationController.authentic
 
 GET		/monitor						controllers.MonitorController.index()
 GET		/monitor/socket					controllers.MonitorController.messageWs()
-POST	/monitor/receive				controllers.MonitorController.pageReceived()
+POST	/monitor/page					controllers.MonitorController.pageReceived()
+POST	/monitor/status					controllers.MonitorController.statusReceived()
 GET		/monitor/execrequest			controllers.MonitorController.execRequest()
 
 # User page
@@ -43,6 +44,12 @@ GET /image/show							controllers.ImageController.show(id:Long, product:Long)
 GET /image/:id/edit/:product            controllers.ImageController.edit(id:Long, product:Long)
 POST /image/:id/edit/:product           controllers.ImageController.update(id:Long, product:Long)
 GET /image/:id/delete/:product       	controllers.ImageController.delete(id:Long, product:Long)
+
+# Order page
+
+GET /order/index						controllers.OrderController.index(p:Int ?= 0, s ?= "client", o ?= "asc", f ?= "")
+GET /order/:id/tray						controllers.OrderController.tray(id:Long)
+GET /order/:id/trays					controllers.OrderController.trays(p:Int ?= 0, s ?= "code", o ?= "asc", f ?= "", id:Long)
 
 # Product page
 
