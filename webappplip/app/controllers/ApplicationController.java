@@ -26,7 +26,7 @@ public class ApplicationController extends Controller {
 	static Form<Login> loginForm = Form.form(Login.class);
 
 	public static Result index() {
-		int x = -30;
+		int x = -500;
 		Calendar cal = GregorianCalendar.getInstance();
 		cal.add( Calendar.DAY_OF_YEAR, x);
 		Date now = new Date();
@@ -77,10 +77,12 @@ public class ApplicationController extends Controller {
 			onode.put("date", reportDate);
 			int count = 0;
 			for (Page page : pages) {
-				List<TrayStatus> statuses = page.tray.tray_status;
-				for (TrayStatus status : statuses) {
-					if (status.status.id == 9) {
-						count ++;
+				if (page.tray != null) {
+					List<TrayStatus> statuses = page.tray.tray_status;
+					for (TrayStatus status : statuses) {
+						if (status.status.id == 9) {
+							count ++;
+						}
 					}
 				}
 			}

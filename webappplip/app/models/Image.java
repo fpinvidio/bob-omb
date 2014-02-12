@@ -11,6 +11,7 @@ import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
 import com.avaje.ebean.Page;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import controllers.routes;
 
@@ -29,6 +30,7 @@ public class Image extends Model {
 	@ManyToOne
 	@JoinColumn(name = "id_position", referencedColumnName = "id_position")
 	public Position position;
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "id_product")
 	public Product product;
@@ -41,8 +43,10 @@ public class Image extends Model {
 	public String getSitePath() {
 		if (path != null) {
 			int start_index = path.indexOf("/uploads/");
-			String uploads_path = path.substring(start_index);
-			return routes.Assets.at(uploads_path).url();
+			if (start_index > 0) {
+				String uploads_path = path.substring(start_index);
+				return routes.Assets.at(uploads_path).url();
+			}
 		}
 		return "";
 	}
@@ -52,11 +56,18 @@ public class Image extends Model {
 
 	public static Page<Image> page(int page, int pageSize, String sortBy,
 			String order, String filter, Product product) {
-		return find.where().join("product").where()
-				.eq("t0.id_product", product.id)
-				.ilike("name", "%" + filter + "%")
-				.orderBy(sortBy + " " + order).findPagingList(pageSize)
-				.setFetchAhead(false).getPage(page);
+		if (filter == null || filter == "") {
+			return find.where().join("product").where()
+					.eq("t0.id_product", product.id)
+					.orderBy(sortBy + " " + order).findPagingList(pageSize)
+					.setFetchAhead(false).getPage(page);	
+		} else {
+			return find.where().join("product").where()
+					.eq("t0.id_product", product.id)
+					.ilike("name", "%" + filter + "%")
+					.orderBy(sortBy + " " + order).findPagingList(pageSize)
+					.setFetchAhead(false).getPage(page);
+		}
 	}
 
 }

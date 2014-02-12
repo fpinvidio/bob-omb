@@ -17,7 +17,7 @@
 	    }
 		<div class="media">
 		  <a class="pull-left" href="#">
-		  	@if(product.image_number > 0) {
+		  	@if(product.images != null && product.images.length > 0) {
                 <img class="media-object" src="@product.images(0).getSitePath()"  width="150px" alt="User">
             } else {
                 <img class="media-object" src="http://placehold.it/150x100" alt="User">
@@ -35,7 +35,11 @@
 			  <dt>Laboratory</dt>
 			    <dd>@product.laboratory</dd>
 			  <dt>Category</dt>
-			    <dd>@product.category.name</dd>
+			 	  @if(product.category != null) {
+	                  <dd>@product.category.name</dd>
+	              } else {
+	                  <dd>No category</dd>
+	              }
 			  <dt>Status</dt>
 				  @if(product.enabled == false) {
 	                  <dd><span class="label label-danger">Inactive</span></dd>

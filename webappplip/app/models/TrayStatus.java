@@ -42,6 +42,9 @@ public class TrayStatus extends Model {
 	public String getStatusType() {
 		String type = "success";
 		switch (this.status.id.intValue()) {
+		case 5:
+			type = "danger";
+			break;
 		case 7:
 			type = "warning";
 			break;

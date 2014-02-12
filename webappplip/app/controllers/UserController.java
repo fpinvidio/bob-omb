@@ -1,9 +1,11 @@
 package controllers;
 
 import static play.data.Form.form;
+import helpers.HashHelper;
 
 import java.util.List;
 
+import exceptions.EmptyPasswordException;
 import models.Role;
 import models.User;
 import play.data.Form;
@@ -11,8 +13,8 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 import views.html.user.create;
-import views.html.user.index;
 import views.html.user.edit;
+import views.html.user.index;
 import views.html.user.show;
 
 @Security.Authenticated(SecuredAuthenticator.class)
@@ -53,12 +55,18 @@ public class UserController extends Controller {
     }
 	
 	public static Result update(Long id) {
-		User user = User.find.byId(id);
         Form<User> filledForm = form(User.class).bindFromRequest();
+        User user = User.find.byId(id);
         if(filledForm.hasErrors()) {
+        	System.out.print(filledForm.errors().toString());
             return badRequest(edit.render(user, filledForm, roles));
         }
-        filledForm.get().update(id);
+        User updated = filledForm.get();
+        user.name = updated.name;
+        user.last_name = updated.last_name;
+        user.username = updated.username;
+        user.role = updated.role;
+        user.update();
         flash("success", "User " + filledForm.get().name + " has been updated");
         return index();
     }

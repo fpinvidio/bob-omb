@@ -69,11 +69,12 @@
 <div class="row">
 	<script type="text/javascript" charset="utf-8">
 		var lastOrderId = null;
+		var lastPageId = null;
 		function buildPageFeed(page) {
 			var resultHTML = '<li><div class="col-md-8"><span class="glyphicon glyphicon-bullhorn"></span> '
-					+ 'Tray Arrived - <a href="/order/' + page.order.id + '/tray">'
-					+ page.order.code
-					+ '</a></div><div class="col-md-4 abbr_time"><i><abbr class="timeago" title="'
+					+ '<a href="/order/' + page.order.id + '/tray">'
+					+ 'Tray Arrived'
+					+ '</a></div><div class="col-md-4 abbr_time"><i style="font-size: 10px;"><abbr class="timeago" title="'
 					+ new Date().toISOString() + '"></abbr></i></div></li>';
 			return resultHTML;
 		}
@@ -81,7 +82,7 @@
 			var resultHTML = '<li><div class="col-md-8"><span class="glyphicon glyphicon-bullhorn"></span> '
 					+ '<a href="/order/' + id + '/tray">'
 					+ status.description
-					+ '</a></div><div class="col-md-3 abbr_time"><i><abbr class="timeago" title="'
+					+ '</a></div><div class="col-md-3 abbr_time"><i style="font-size: 10px;"><abbr class="timeago" title="'
 					+ new Date().toISOString() + '"></abbr></i></div></li>';
 			return resultHTML;
 		}
@@ -102,9 +103,17 @@
 			}
 			$("#order-progress").append(result)
 		}
+		function resetOrderFields() {
+			$("#client_label").html("Not available");
+			$("#date_label").html("Not available");
+			$("#page_image").attr("src", "http://placehold.it/150x100");
+			$("#products_list").html("Not data available.");
+			$("#status_list").html("");
+			$("#order-progress").html("");
+		}
 		function setOrderFields(page) {
 			$("#client_label").html(page.order.client);
-			$("#date_label").html(new Date(page.order.insert_date).toString());
+			$("#date_label").html(moment(new Date(page.order.insert_date)).format("YYYY-MM-DD HH:mm:ss"));
 			if (page.page_image != null)
 				$("#page_image").attr("src", page.page_image.sitePath);
 			var products_array = page.page_products;
@@ -129,20 +138,26 @@
 				var result = JSON.parse(JSON.parse(event.data).text);
 				switch (result.type) {
 				case "page":
-					$("#live_feed").append(buildPageFeed(result.object));
+					$("#live_feed").prepend(buildPageFeed(result.object));
 					lastOrderId = result.object.order.id;
+					lastPageId = result.object.id;
 					jQuery("abbr.timeago").timeago();
 					jQuery.timeago(new Date());
+					resetOrderFields();
 					setOrderFields(result.object);
 					addPercentageToBar(20, "success")
 					break;
 				case "status":
-					$("#first_line_status").hide();
-					$("#live_feed").append(buildStatusFeed(result.object.status, lastOrderId));
-					setStatusFields(result.object);
-					jQuery("abbr.timeago").timeago();
-					jQuery.timeago(new Date());
-					addPercentageToBar(30, result.object.statusType);
+					if (result.object.tray.page.id == lastPageId) {
+						$("#first_line_status").hide();
+						$("#live_feed").prepend(buildStatusFeed(result.object.status, lastOrderId));
+						setStatusFields(result.object);
+						jQuery("abbr.timeago").timeago();
+						jQuery.timeago(new Date());
+						addPercentageToBar(40, result.object.statusType);	
+					} else {
+						resetOrderFields();
+					}
 					break;
 				}
 			}

@@ -4,7 +4,7 @@
 @import fields._
 @implicitField = @{ FieldConstructor(bootstrapfield.f) }
 
-@main("Add User") { 	
+@main("Edit User") { 	
 	<div class="row row-offcanvas row-offcanvas-right">
 		<div class="col-xs-12 col-sm-9 ">
 			<ol class="breadcrumb">
@@ -19,7 +19,9 @@
 					@inputText(userform("name"), '_label -> "Name", 'class -> "form-control")
 					@inputText(userform("last_name"), '_label -> "Lastname", 'class -> "form-control")
 					@inputText(userform("username"), '_label -> "Username", 'class -> "form-control")
-					@inputPassword(userform("password"), '_label -> "Password", 'class -> "form-control")
+					@defining(userform("password")) { password =>
+					  <input type="hidden" name="password" id="password" value="@user.password">
+					}
 					@select(userform("role.id"), roles.map{
 						r => r.id.toString -> r.name 
 					}, '_label -> "Role",

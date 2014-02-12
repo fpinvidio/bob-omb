@@ -14,7 +14,7 @@ GET		/monitor						controllers.MonitorController.index()
 GET		/monitor/socket					controllers.MonitorController.messageWs()
 POST	/monitor/page					controllers.MonitorController.pageReceived()
 POST	/monitor/status					controllers.MonitorController.statusReceived()
-GET		/monitor/execrequest			controllers.MonitorController.execRequest()
+POST	/monitor/receive				controllers.MonitorController.receiveEvent()
 
 # User page
 

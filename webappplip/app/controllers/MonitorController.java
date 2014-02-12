@@ -38,6 +38,33 @@ public class MonitorController extends Controller {
 			}
 		};
 	}
+	
+	public static Result receiveEvent() {
+		String[] params1 = request().body().asFormUrlEncoded().get("page_id");
+		String[] params2 = request().body().asFormUrlEncoded().get("tray_status_id");
+		if ((params1 != null && params1.length > 0) && (params2 != null && params2.length > 0)) {
+			String page_id = params1[0];
+			String status_id = params2[0];
+			if (page_id == null || status_id == null) {
+				return badRequest("Missing parameter");
+			} else {
+				Long id_page = Long.parseLong(page_id);
+				Long id_status = Long.parseLong(status_id);
+				TrayStatus status = TrayStatus.find.byId(id_status);
+				if (status.status.id == 1) {
+					Page page = Page.find
+							.fetch("page_products", new FetchConfig().query())
+							.fetch("page_products.product").where()
+							.eq("t0.id_page", id_page).findUnique();
+					Monitor.instance.tell(new InboundPage(page), null);
+				} else {
+					Monitor.instance.tell(new InboundStatus(status), null);
+				}
+				return ok("Received Event");
+			}
+		}
+		return badRequest("Missing parameter");
+	}
 
 	public static Result pageReceived() {
 		String[] params = request().body().asFormUrlEncoded().get("page_id");

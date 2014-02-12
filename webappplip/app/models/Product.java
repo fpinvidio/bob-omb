@@ -26,7 +26,7 @@ public class Product extends Model {
 	public Long id;
 	@Required
 	public String name;
-	public int weight;
+	public Integer weight;
 	public String description;
 	@Required
 	public int code;
@@ -35,7 +35,7 @@ public class Product extends Model {
 	@ManyToOne
 	@JoinColumn(name="id_product_category")
 	public Category category;
-	public int image_number;
+	public Integer image_number;
 	public boolean enabled;
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="id_product", referencedColumnName="id_product")
