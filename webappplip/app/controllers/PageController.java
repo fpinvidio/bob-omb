@@ -10,7 +10,7 @@ public class PageController extends Controller {
 
 	public static Result getLatestPage() {
 		Page page = Page.find.fetch("page_products", new FetchConfig().query())
-				.fetch("page_products.product").setMaxRows(1).findUnique();
+				.fetch("page_products.product").orderBy("id_page desc").setMaxRows(1).findUnique();
 		return ok(page != null ? page.toJson().toString() : "");
 	}
 

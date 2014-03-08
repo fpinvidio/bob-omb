@@ -72,8 +72,10 @@ public class ImageController extends Controller {
         if(filledForm.hasErrors()) {
             return badRequest(edit.render(product, image, filledForm, positions));
         }
-        filledForm.get().update(id);
-        flash("success", "Image " + filledForm.get().name + " has been updated");
+        image = filledForm.get();
+        image.trained = false;
+        image.update(id);
+        flash("success", "Image " + image.name + " has been updated");
         return show(id, product_id);
     }
 	

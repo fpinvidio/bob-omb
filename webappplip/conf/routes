@@ -50,6 +50,8 @@ GET /image/:id/delete/:product       	controllers.ImageController.delete(id:Long
 GET /order/index						controllers.OrderController.index(p:Int ?= 0, s ?= "client", o ?= "asc", f ?= "")
 GET /order/:id/tray						controllers.OrderController.tray(id:Long)
 GET /order/:id/trays					controllers.OrderController.trays(p:Int ?= 0, s ?= "code", o ?= "asc", f ?= "", id:Long)
+GET /order/create						controllers.OrderController.create()
+POST /order/create						controllers.OrderController.newOrder()
 
 # Product page
 

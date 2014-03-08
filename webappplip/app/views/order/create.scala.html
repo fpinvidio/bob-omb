@@ -1,0 +1,72 @@
+@(products: List[Product])
+
+@import helper._
+@import fields._
+@implicitField = @{ FieldConstructor(bootstrapfield.f) }
+
+@main("Add Order") { 	
+	<h2>Add a new order</h2>
+	<div class="well well-lg col-md-6">
+		<form id="cool_form" class="form-horizontal" action="@routes.OrderController.newOrder()" method="POST">
+			<div class="form-group ">
+				<label for="code" class="col-sm-2 control-label">Code</label>
+			    <div class="input col-md-10">
+			        <input id="code" name="code" class="form-control"></input>
+			    </div>
+		    </div>
+		    <div class="form-group ">
+				<label for="client" class="col-sm-2 control-label">Client</label>
+			    <div class="input col-md-10">
+			        <input id="client" name="client" class="form-control"></input>
+			    </div>
+		    </div>
+			<div class="form-group">
+			    <label for="add_product_select" class="col-sm-2 control-label">Product</label>
+			    <div class="input col-md-10">
+			        <select id="add_product_select" name="add_product_select" class="form-control">
+			        		@for(p <- products) {
+			        			<option value="@p.id" selected="selected">@p.name</option>
+							}
+			        </select>
+			    </div>
+			</div>
+			<div class="form-group ">
+				<label for="prod_qty" class="col-sm-2 control-label">Quantity</label>
+			    <div class="input col-md-10">
+			        <input id="prod_qty" name="prod_qty" class="form-control" type="number" min="1" value="1"></input>
+			    </div>
+		    </div>
+		    <div class="form-group ">
+			    <button id="add_button" type="button" class="btn btn-success pull-right" value="Create">Add Product</button>
+		    </div>
+		    <div class="form-group ">
+				<button type="submit" class="btn btn-primary" value="Create">Create</button>
+			</div>
+		</form>
+	</div>
+	<div class="col-md-6">
+		<div>
+			<h4>Products</h4>
+			<ul id="products_list">
+				<i>No products added.</i>
+			</ul>
+		</div>
+	</div>
+	<script>
+		var i = 0;
+		$( "#add_button" ).click(function() {
+			var list = $( "#products_list" );
+			var product_id = $("#add_product_select option:selected").val();
+			var product_name = $("#add_product_select option:selected").text();
+			var qty = $("#prod_qty").val();
+			if (i==0) {
+				list.html('<i>'+product_name+' - '+qty+'</i>');
+				i++;
+			} else {
+				list.append('</br><i>'+product_name+' - '+qty+'</i>');
+			}
+			$("#prod_qty").append('<input type="hidden" name="products[]" value="'+product_id+'"><input type="hidden" name="quantities[]" value="'+qty+'"></input>');
+			$("#prod_qty").val(1);
+		});
+	</script>
+}
