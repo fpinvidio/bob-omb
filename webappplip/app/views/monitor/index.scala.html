@@ -120,6 +120,7 @@
 			$("#status_list").html("");
 			$("#order-progress").html("");
 			percentage = 0;
+			popover = false;
 			has_error = false;
 		}
 		function setOrderFields(page) {
@@ -173,31 +174,37 @@
 						jQuery.timeago(new Date());
 						var type = result.object.statusType;
 						addPercentageToBar(40, type);
-						if (type=="error") {
+						if (type=="danger") {
 							has_error = true;
 						}
 						if(percentage == 100) {
 							var title="";
 							var content="";
 							if(!has_error) {
-								$('.popover-title').css("background-color", "#5cb85c");
 								title = "Success";
 								content = "Tray successfully validated";
 								succSound.play();
+								$("#popover-div").popover({
+									trigger: "manual",
+									title: title,
+									content: content
+								});	
+								$("#popover-div").popover('show');
+								$('.popover-title').css("background-color", "#5cb85c");
+								$('.popover-title').css("color", "#f7f7f7");
 							}else {
 								title = "Error";
 								content = "There was an error processing the tray";
 								errSound.play();
+								$("#popover-div").popover({
+									trigger: "manual",
+									title: title,
+									content: content
+								});	
+								$("#popover-div").popover('show');
+								$('.popover-title').css("background-color", "#d9534f");
+								$('.popover-title').css("color", "#f7f7f7");
 							}
-							$("#popover-div").popover({
-								trigger: "manual",
-								title: title,
-								content: content
-							});	
-							$("#popover-div").popover('show');
-							$('.popover-title').css("background-color", "#d9534f");
-							$('.popover-title').css("color", "#f7f7f7");
-							//$('.popover').css("background-color", "red");
 							popover = true;
 							setTimeout(function(){
 								$("#popover-div").popover('hide');
