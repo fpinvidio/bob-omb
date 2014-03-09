@@ -13,7 +13,7 @@
 			<li class="active">Monitor</li>
 		</ol>
 		<h1>Monitor</h1>
-		<div class="col-md-8">
+		<div class="col-md-8" id="popover-div">
 			<div class="progress active progress-striped" id="order-progress">
 			</div>
 			<div class="media">
@@ -70,6 +70,14 @@
 	<script type="text/javascript" charset="utf-8">
 		var lastOrderId = null;
 		var lastPageId = null;
+		var percentage = 0;
+		var popover = false;
+		var errSound = document.createElement('audio');
+		errSound.setAttribute('src', "@routes.Assets.at("sounds/error.mp3")");
+		errSound.load;
+		var succSound = document.createElement('audio');
+		succSound.setAttribute('src', "@routes.Assets.at("sounds/success.mp3")");
+		succSound.load; 
 		function buildPageFeed(page) {
 			var resultHTML = '<li><div class="col-md-8"><span class="glyphicon glyphicon-bullhorn"></span> '
 					+ '<a href="/order/' + page.order.id + '/tray">'
@@ -110,6 +118,7 @@
 			$("#products_list").html("Not data available.");
 			$("#status_list").html("");
 			$("#order-progress").html("");
+			percentage = 0;
 		}
 		function setOrderFields(page) {
 			$("#client_label").html(page.order.client);
@@ -136,6 +145,10 @@
 			var receiveEvent = function(event) {
 				$("#first_line").hide();
 				var result = JSON.parse(JSON.parse(event.data).text);
+				if(popover) {
+					$("#popover-div").popover('hide');
+					popover = false;
+				}
 				switch (result.type) {
 				case "page":
 					$("#live_feed").prepend(buildPageFeed(result.object));
@@ -146,15 +159,45 @@
 					resetOrderFields();
 					setOrderFields(result.object);
 					addPercentageToBar(20, "success")
+					percentage += 20;
 					break;
 				case "status":
 					if (result.object.tray.page.id == lastPageId) {
 						$("#first_line_status").hide();
 						$("#live_feed").prepend(buildStatusFeed(result.object.status, lastOrderId));
+						percentage += 40;
 						setStatusFields(result.object);
 						jQuery("abbr.timeago").timeago();
 						jQuery.timeago(new Date());
-						addPercentageToBar(40, result.object.statusType);	
+						var type = result.object.statusType;
+						addPercentageToBar(40, type);
+						if(percentage == 100) {
+							var title="";
+							var content="";
+							if(type == "success") {
+								$('.popover-title').css("background-color", "#5cb85c");
+								title = "Success";
+								content = "Tray successfully validated";
+								succSound.play();
+							}else {
+								title = "Error";
+								content = "There was an error processing the tray";
+								errSound.play();
+							}
+							$("#popover-div").popover({
+								trigger: "manual",
+								title: title,
+								content: content
+							});	
+							$("#popover-div").popover('show');
+							$('.popover-title').css("background-color", "#d9534f");
+							$('.popover-title').css("color", "#f7f7f7");
+							//$('.popover').css("background-color", "red");
+							popover = true;
+							setTimeout(function(){
+								$("#popover-div").popover('hide');
+								},10000);
+						}
 					} else {
 						resetOrderFields();
 					}

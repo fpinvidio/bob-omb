@@ -28,14 +28,20 @@ public class ApplicationController extends Controller {
 	public static Result index() {
 		int x = -500;
 		Calendar cal = GregorianCalendar.getInstance();
+		Calendar newcal = GregorianCalendar.getInstance();
 		cal.add( Calendar.DAY_OF_YEAR, x);
+		newcal.add( Calendar.DAY_OF_YEAR, -1);
+		newcal.set(Calendar.HOUR_OF_DAY, 23);
+		newcal.set(Calendar.MINUTE, 59);
+		newcal.set(Calendar.SECOND, 59);
 		Date now = new Date();
 		Date days_ago = cal.getTime();
+		Date yesterday = newcal.getTime();
 		List<Tray> invalid_trays = Tray.find.fetch("tray_status").fetch("tray_status.status").where().eq("t1.id_status", "9").findList();
 		int valid = Tray.find.all().size() - invalid_trays.size();
 		int analyzed_trays = Tray.find.all().size();
 		List<Order> orders = Order.find.fetch("pages").fetch("pages.tray").fetch("pages.tray.tray_status").fetch("pages.tray.tray_status.status").where().between("insert_date", days_ago, now).findList();
-		List<Order> today_orders = Order.find.fetch("pages").fetch("pages.tray").findList();
+		List<Order> today_orders = Order.find.fetch("pages").fetch("pages.tray").where().between("insert_date", yesterday, now).findList();
 		int today_trays = 0;
 		for (Order order : today_orders) {
 			today_trays += order.pages.size();
