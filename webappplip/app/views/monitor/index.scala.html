@@ -72,6 +72,7 @@
 		var lastPageId = null;
 		var percentage = 0;
 		var popover = false;
+		var has_error = false;
 		var errSound = document.createElement('audio');
 		errSound.setAttribute('src', "@routes.Assets.at("sounds/error.mp3")");
 		errSound.load;
@@ -119,6 +120,7 @@
 			$("#status_list").html("");
 			$("#order-progress").html("");
 			percentage = 0;
+			has_error = false;
 		}
 		function setOrderFields(page) {
 			$("#client_label").html(page.order.client);
@@ -171,10 +173,13 @@
 						jQuery.timeago(new Date());
 						var type = result.object.statusType;
 						addPercentageToBar(40, type);
+						if (type=="error") {
+							has_error = true;
+						}
 						if(percentage == 100) {
 							var title="";
 							var content="";
-							if(type == "success") {
+							if(!has_error) {
 								$('.popover-title').css("background-color", "#5cb85c");
 								title = "Success";
 								content = "Tray successfully validated";
