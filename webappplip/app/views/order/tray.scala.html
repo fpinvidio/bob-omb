@@ -58,7 +58,7 @@
 	    }
 		<h1>Trays</h1>
 	    
-	    @if(currentPage.getTotalRowCount == 0) {
+	    @if(currentPage.getList.size == 0) {
         
 	        <div class="well">
 	            <em>Nothing to display</em>
@@ -92,11 +92,7 @@
 			                }
 					</tbody>
 				</table>
-				<p class="current text-right">
-	                Displaying @currentPage.getDisplayXtoYofZ(" to "," of ")
-	            </p>
 	            <ul class="pagination pull-right">
-	            	<li><a href="@link(0, null)">&laquo;</a></li>
 	            	@if(currentPage.hasPrev) {
 	                    <li class="prev">
 	                        <a href="@link(currentPage.getPageIndex - 1, null)">&larr; Previous</a>
@@ -106,9 +102,6 @@
 	                        <a>&larr; Previous</a>
 	                    </li>
 	                }
-	            	@for(i <- 0 until currentPage.getTotalPageCount) {
-	            		<li class="@("active".when(i == currentPage.getPageIndex))"><a href="@link(i, null)">@i</a></li>
-	            	}
 	            	@if(currentPage.hasNext) {
 	                    <li class="next">
 	                        <a href="@link(currentPage.getPageIndex + 1, null)">Next &rarr;</a>
@@ -118,7 +111,6 @@
 	                        <a>Next &rarr;</a>
 	                    </li>
 	                }
-	            	<li><a href="@link(currentPage.getTotalPageCount - 1, null)">&raquo;</a></li>
 	            </ul>
             </div>
 		}

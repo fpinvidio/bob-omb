@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
+import com.avaje.ebean.FetchConfig;
 import com.avaje.ebean.Page;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -37,14 +38,21 @@ public class Tray extends Model {
 	
 	public static Finder<Long, Tray> find = new Finder<Long, Tray>(Long.class,
 			Tray.class);
-	
-	public static Page<Tray> page(int page, int pageSize, String sortBy, String order, String filter) {
-		return 
-            find.where()
+	//FALTA FILTRAR POR ORDER
+	public static Page<Tray> page(int page, int pageSize, String sortBy, String order, String filter, Order plip_order) {
+		 
+       Page<Tray> res_page =    find
+            	.where()
+            	.join("page.order")
+            	.where()
+            	.eq("t2.id_order", plip_order.id)
                 .ilike("code", "%" + filter + "%")
                 .orderBy(sortBy + " " + order)
                 .findPagingList(pageSize)
-                .setFetchAhead(false)
                 .getPage(page);
+//                .setFirstRow(page*pageSize)
+//                .setMaxRows(pageSize)
+//                .findList();
+       return res_page;
     }
 }

@@ -40,7 +40,7 @@ public class OrderController extends Controller{
 		Order plip_order = Order.find.byId(order_id);
 		return ok(
             tray.render(
-                Tray.page(page, 5, sortBy, order, filter),
+                Tray.page(page, 5, sortBy, order, filter, plip_order),
                 sortBy, order, filter, plip_order
             )
         );
