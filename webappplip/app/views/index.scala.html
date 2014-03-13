@@ -23,7 +23,7 @@
 	for (var i = 0; i < 500; i++) {
 		var tempArrayValue = {};
 		var temp_date = new Date();
-		temp_date.setDate(now.getDate() - i);
+		temp_date.setDate(now.getDate());// - i);
 		var count = 0;
 		for (var key in values) {
 			var value_date = parseDate(values[key].date).getDate();

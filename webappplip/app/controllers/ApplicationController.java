@@ -30,7 +30,7 @@ public class ApplicationController extends Controller {
 		Calendar cal = GregorianCalendar.getInstance();
 		Calendar newcal = GregorianCalendar.getInstance();
 		cal.add( Calendar.DAY_OF_YEAR, x);
-		newcal.add( Calendar.DAY_OF_YEAR, -1);
+		newcal.add(Calendar.DAY_OF_YEAR, -1);
 		newcal.set(Calendar.HOUR_OF_DAY, 23);
 		newcal.set(Calendar.MINUTE, 59);
 		newcal.set(Calendar.SECOND, 59);
