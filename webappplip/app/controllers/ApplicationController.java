@@ -40,7 +40,8 @@ public class ApplicationController extends Controller {
 		List<Tray> invalid_trays = Tray.find.fetch("tray_status").fetch("tray_status.status").where().eq("t1.id_status", "9").findList();
 		int valid = Tray.find.all().size() - invalid_trays.size();
 		int analyzed_trays = Tray.find.all().size();
-		List<Order> orders = Order.find.fetch("pages").fetch("pages.tray").fetch("pages.tray.tray_status").fetch("pages.tray.tray_status.status").where().between("insert_date", days_ago, now).findList();
+		//List<Order> orders = Order.find.fetch("pages").fetch("pages.tray").fetch("pages.tray.tray_status").fetch("pages.tray.tray_status.status").where().between("insert_date", days_ago, now).findList();
+		List<Order> orders = Order.find.where().where().between("insert_date", days_ago, now).findList();
 		List<Order> today_orders = Order.find.fetch("pages").fetch("pages.tray").where().between("insert_date", yesterday, now).findList();
 		int today_trays = 0;
 		for (Order order : today_orders) {
