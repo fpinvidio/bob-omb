@@ -41,7 +41,7 @@ public class ApplicationController extends Controller {
 		int valid = Tray.find.all().size() - invalid_trays.size();
 		int analyzed_trays = Tray.find.all().size();
 		//List<Order> orders = Order.find.fetch("pages").fetch("pages.tray").fetch("pages.tray.tray_status").fetch("pages.tray.tray_status.status").where().between("insert_date", days_ago, now).findList();
-		List<Order> orders = Order.find.where().where().between("insert_date", days_ago, now).findList();
+		List<Order> orders = Order.find.where().between("insert_date", days_ago, now).findList();
 		List<Order> today_orders = Order.find.fetch("pages").fetch("pages.tray").where().between("insert_date", yesterday, now).findList();
 		int today_trays = 0;
 		for (Order order : today_orders) {
@@ -76,18 +76,20 @@ public class ApplicationController extends Controller {
 		ObjectMapper mapper = new ObjectMapper();
 		ArrayNode anode = mapper.createArrayNode();
 		for (Order order : orders) {
-			List<Page> pages = order.getPages();
+			List<Page> pages = Page.find.where().eq("id_order", order.id).findList();
 			ObjectNode onode = mapper.createObjectNode();
 			DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-			Date date = order.getInsert_date();        
+			Date date = order.insert_date;        
 			String reportDate = df.format(date);
 			onode.put("date", reportDate);
 			int count = 0;
 			for (Page page : pages) {
-				if (page.getTray() != null) {
-					List<TrayStatus> statuses = page.getTray().getTray_status();
+				Tray tray = Tray.find.where().eq("id_page", page.id).setMaxRows(1).findUnique();
+				if (tray != null) {
+					List<TrayStatus> statuses = TrayStatus.find.where().eq("id_tray", tray.id).findList();
 					for (TrayStatus status : statuses) {
-						if (status.getStatus().getId() == 9) {
+						Long value = status.getStatus().getId();
+						if (value.intValue() == 9) {
 							count ++;
 						}
 					}
