@@ -177,7 +177,7 @@
 						jQuery("abbr.timeago").timeago();
 						jQuery.timeago(new Date());
 						var type = result.object.statusType;
-						if(result.object.status.id == 3) {
+						if(result.object.status.id == 4 || result.object.status.id == 5) {
 							setImageField(result.object.tray.page);	
 						}
 						addPercentageToBar(40, type);
