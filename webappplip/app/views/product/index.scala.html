@@ -121,7 +121,9 @@
 	                    </li>
 	                }
 	            	@for(i <- 0 until currentPage.getTotalPageCount) {
-	            		<li class="@("active".when(i == currentPage.getPageIndex))"><a href="@link(i, null)">@i</a></li>
+	            		@if(i > currentPage.getPageIndex && i < currentPage.getPageIndex + 5) {
+	            			<li class="@("active".when(i == currentPage.getPageIndex))"><a href="@link(i, null)">@i</a></li>
+	            		} 
 	            	}
 	            	@if(currentPage.hasNext) {
 	                    <li class="next">

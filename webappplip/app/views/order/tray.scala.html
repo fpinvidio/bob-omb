@@ -85,7 +85,15 @@
 			                        <td>@tray.code</td>
 			                        <td>
 										@for(status <- tray.tray_status) {
-										  <li>@status.status.description</li> 
+										  <li>
+										  @status.status.description 
+										  @if(status.status.id == 6) {
+										  	 - @status.product.name
+										  }
+										  @if(status.status.id == 3) {
+										  	 - Cantidad @status.quantity
+										  }
+										  </li> 
 										} 
 									</td>			                        
 			                    </tr>
