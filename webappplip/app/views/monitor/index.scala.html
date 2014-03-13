@@ -136,6 +136,10 @@
 								+ "</li>");
 			});
 		}
+		function setImageField(page) {
+			if (page.page_image != null)
+				$("#page_image").attr("src", page.page_image.sitePath);
+		}
 		function setStatusFields(status) {
 			$("#status_list").append("<li>" + status.status.description
 					+ " - " + new Date(status.date).toString() + "</li>");
@@ -173,6 +177,9 @@
 						jQuery("abbr.timeago").timeago();
 						jQuery.timeago(new Date());
 						var type = result.object.statusType;
+						if(result.object.status.id == 3) {
+							setImageField(result.object.tray.page);	
+						}
 						addPercentageToBar(40, type);
 						if (type=="danger") {
 							has_error = true;
