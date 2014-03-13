@@ -75,18 +75,18 @@ public class ApplicationController extends Controller {
 		ObjectMapper mapper = new ObjectMapper();
 		ArrayNode anode = mapper.createArrayNode();
 		for (Order order : orders) {
-			List<Page> pages = order.pages;
+			List<Page> pages = order.getPages();
 			ObjectNode onode = mapper.createObjectNode();
 			DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-			Date date = order.insert_date;        
+			Date date = order.getInsert_date();        
 			String reportDate = df.format(date);
 			onode.put("date", reportDate);
 			int count = 0;
 			for (Page page : pages) {
-				if (page.tray != null) {
-					List<TrayStatus> statuses = page.tray.tray_status;
+				if (page.getTray() != null) {
+					List<TrayStatus> statuses = page.getTray().getTray_status();
 					for (TrayStatus status : statuses) {
-						if (status.status.id == 9) {
+						if (status.getStatus().getId() == 9) {
 							count ++;
 						}
 					}
