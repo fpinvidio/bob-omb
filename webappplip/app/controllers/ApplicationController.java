@@ -42,10 +42,11 @@ public class ApplicationController extends Controller {
 		int analyzed_trays = Tray.find.all().size();
 		//List<Order> orders = Order.find.fetch("pages").fetch("pages.tray").fetch("pages.tray.tray_status").fetch("pages.tray.tray_status.status").where().between("insert_date", days_ago, now).findList();
 		List<Order> orders = Order.find.where().between("insert_date", days_ago, now).findList();
-		List<Order> today_orders = Order.find.fetch("pages").fetch("pages.tray").where().between("insert_date", yesterday, now).findList();
+		List<Order> today_orders = Order.find.where().between("insert_date", yesterday, now).findList();
 		int today_trays = 0;
 		for (Order order : today_orders) {
-			today_trays += order.pages.size();
+			List<Page> pages = Page.find.where().eq("id_order", order.id).findList();
+			today_trays += pages.size();
 		}
 		return ok(index.render("", invalid_trays, valid, buildOrderJson(orders), analyzed_trays, orders.size(), today_trays));
 	}
