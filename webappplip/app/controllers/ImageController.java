@@ -110,7 +110,11 @@ public class ImageController extends Controller {
 			image.path = saved_file.getPath();
 			image.save();
 			product.images.add(image);
-			product.image_number++;
+			if (product.image_number != null) {
+				product.image_number++;
+			} else {
+				product.image_number = 1;
+			}
 			product.save();
 			flash("success", "Image " + name + " has been created");
 			return product(product_id);
